@@ -28,17 +28,24 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AIMWebScraping\Demos\webscraping_demo.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="runserver.py" />
     <Compile Include="AIMWebScraping\__init__.py" />
     <Compile Include="AIMWebScraping\views.py" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AIMWebScraping\" />
+    <Folder Include="AIMWebScraping\Demos\" />
     <Folder Include="AIMWebScraping\static\" />
     <Folder Include="AIMWebScraping\static\content\" />
     <Folder Include="AIMWebScraping\static\fonts\" />
     <Folder Include="AIMWebScraping\static\scripts\" />
     <Folder Include="AIMWebScraping\templates\" />
+    <Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\IMDb\" />
+    <Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\AIMWebScraping\Demos\" />
+    <Folder Include="IMDb\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
@@ -65,7 +72,7 @@
     <Content Include="AIMWebScraping\static\scripts\respond.min.js" />
     <Content Include="AIMWebScraping\static\scripts\_references.js" />
     <Content Include="AIMWebScraping\templates\about.html" />
-    <Content Include="AIMWebScraping\templates\contact.html" />
+    <Content Include="AIMWebScraping\templates\requests.html" />
     <Content Include="AIMWebScraping\templates\index.html" />
     <Content Include="AIMWebScraping\templates\layout.html" />
   </ItemGroup>

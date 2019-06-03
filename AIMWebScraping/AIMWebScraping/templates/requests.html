@@ -1,0 +1,54 @@
+{% extends "layout.html" %}
+{% block head %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script type=text/javascript>
+	$(function () {
+		$('a#requests').click(function () {
+			$.ajax({
+				url: '/requests_test',
+				data: { name: $('#name').val() },
+				success: function (data) {
+					console.log('get info');
+					$('#results2').text(JSON.stringify(data, null, '   '));
+				}
+			});
+		});
+	})
+</script>
+
+<script type=text/javascript>
+	$(function () {
+		$('a#soup').click(function () {
+			$.ajax({
+				url: '/soup_test',
+				data: { name: $('#name').val() },
+				success: function (data) {
+					console.log('get info');
+					$('#results2').text(JSON.stringify(data, null, '   '));
+				}
+			});
+		});
+	})
+</script>
+{% endblock %}
+{% block content %}
+
+<h2>{{ title }}.</h2>
+<h3></h3>
+
+<div class='container'>
+	<h3>Test</h3>
+	<fieldset>
+		<label>Name</label>
+		<input id="name" required value="{{ search }}" />
+	</fieldset>
+	<a href=# id=requests><button class='btn btn-default'>Requests</button></a>
+	<a href=# id=soup><button class='btn btn-default'>Beautiful Soup</button></a>
+
+	<span id=result></span>
+
+	<p id="results2"></p>
+</div>
+
+{% endblock %}
