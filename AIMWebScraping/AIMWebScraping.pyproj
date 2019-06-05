@@ -43,9 +43,8 @@
     <Folder Include="AIMWebScraping\static\fonts\" />
     <Folder Include="AIMWebScraping\static\scripts\" />
     <Folder Include="AIMWebScraping\templates\" />
-    <Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\IMDb\" />
-    <Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\AIMWebScraping\Demos\" />
-    <Folder Include="IMDb\" />
+    <!--<Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\IMDb\" />
+    <Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\AIMWebScraping\Demos\" />-->
   </ItemGroup>
   <ItemGroup>
     <Content Include="requirements.txt" />
