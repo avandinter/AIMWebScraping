@@ -55,9 +55,7 @@ def scrapy_test():
     #demo = spider(year)
     scrapy = demo.ScrapyExample()
     scrapy.begin_scraping()
-    
-    for item in scrapy.scraped_items:
-        print(item["name"])
+
     #runner = CrawlerRunner()
     #d = runner.crawl(demo.ScrapySpider)
     #d.addBoth(lambda _: reactor.stop())

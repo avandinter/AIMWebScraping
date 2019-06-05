@@ -1,8 +1,9 @@
-import requests
+#import requests
 from bs4 import BeautifulSoup as bs
 import scrapy
 from scrapy.crawler import CrawlerRunner, CrawlerProcess
 import time
+import requests
 
 class webscraping_demo(object):
     base_brickset_url = "https://brickset.com/sets/"
@@ -93,7 +94,7 @@ class ScrapySpider(scrapy.Spider):
         print(next_page)
         if next_page is not None:
             next_page = response.urljoin(next_page)
-            #yield scrapy.Request(next_page, callback=self.parse)
+            yield scrapy.Request(next_page, callback=self.parse)
 
 
 
