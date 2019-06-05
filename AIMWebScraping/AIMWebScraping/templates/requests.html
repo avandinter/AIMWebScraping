@@ -7,7 +7,7 @@
 		$('a#requests').click(function () {
 			$.ajax({
 				url: '/requests_test',
-				data: { name: $('#name').val() },
+				data: { year: $('#year').val() },
 				success: function (data) {
 					console.log('get info');
 					$('#results2').text(JSON.stringify(data, null, '   '));
@@ -22,10 +22,40 @@
 		$('a#soup').click(function () {
 			$.ajax({
 				url: '/soup_test',
-				data: { name: $('#name').val() },
+				data: { year: $('#year').val() },
 				success: function (data) {
 					console.log('get info');
-					$('#results2').text(JSON.stringify(data, null, '   '));
+					$('#results2').html(JSON.stringify(data, null, '   '));
+				}
+			});
+		});
+	})
+</script>
+
+<script type=text/javascript>
+	$(function () {
+		$('a#allbs').click(function () {
+			$.ajax({
+				url: '/scan_all_test',
+				data: { year: $('#year').val() },
+				success: function (data) {
+					console.log('get info');
+					$('#results2').html(JSON.stringify(data, null, '   '));
+				}
+			});
+		});
+	})
+</script>
+
+<script type=text/javascript>
+	$(function () {
+		$('a#scrapy').click(function () {
+			$.ajax({
+				url: '/scrapy_test',
+				data: { year: $('#year').val() },
+				success: function (data) {
+					console.log('get info');
+					$('#results2').html(JSON.stringify(data, null, '   '));
 				}
 			});
 		});
@@ -40,12 +70,13 @@
 <div class='container'>
 	<h3>Test</h3>
 	<fieldset>
-		<label>Name</label>
-		<input id="name" required value="{{ search }}" />
+		<label>Year</label>
+		<input id="year" required value="{{ search }}" />
 	</fieldset>
 	<a href=# id=requests><button class='btn btn-default'>Requests</button></a>
 	<a href=# id=soup><button class='btn btn-default'>Beautiful Soup</button></a>
-
+	<a href=# id=allbs><button class='btn btn-default'>Scan All with Requests and BS</button></a>
+	<a href=# id=scrapy><button class='btn btn-default'>Scan All with Scrapy</button></a>
 	<span id=result></span>
 
 	<p id="results2"></p>

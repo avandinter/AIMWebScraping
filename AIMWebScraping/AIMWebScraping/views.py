@@ -5,7 +5,8 @@ Routes and views for the flask application.
 from datetime import datetime
 from flask import render_template, request, jsonify
 from AIMWebScraping import app
-from AIMWebScraping.Demos import webscraping_demo as req
+from AIMWebScraping.Demos import webscraping_demo as demo
+#from twisted.internet import reactor
 
 @app.route('/')
 @app.route('/home')
@@ -19,36 +20,53 @@ def home():
 
 @app.route('/requests_demo')
 def requests_demo():
-
     return render_template(
         'requests.html',
-        title='Requests Demo',
+        title='Demo',
         year=datetime.now().year,
-        search ="Python XKCD",
+        search ="2018",
         message = ""
     )
 
 @app.route('/requests_test')
 def requests_test():
-    
-    name = request.args.get('name')
-    print(name)
-    demo = req.webscraping_demo()
+    year = request.args.get('year')
+    scraper = demo.webscraping_demo(year)
 
-    return jsonify(demo.requests_google_search(name))
+    return jsonify(scraper.requests_brickset())
 
 @app.route('/soup_test')
 def soup_test():
-    
-    name = request.args.get('name')
-    print(name)
-    demo = req.webscraping_demo()
+    year = request.args.get('year')
+    scraper = demo.webscraping_demo(year)
 
-    return jsonify(demo.requests_google_search(name))
+    return jsonify(scraper.bs4_brickset())
+
+@app.route('/scan_all_test')
+def scan_all_test():
+    year = request.args.get('year')
+    scraper = demo.webscraping_demo(year)
+
+    return jsonify(scraper.all_pages_brickset())
+
+@app.route('/scrapy_test')
+def scrapy_test():
+    year = request.args.get('year')
+    #demo = spider(year)
+    scrapy = demo.ScrapyExample()
+    scrapy.begin_scraping()
+    
+    for item in scrapy.scraped_items:
+        print(item["name"])
+    #runner = CrawlerRunner()
+    #d = runner.crawl(demo.ScrapySpider)
+    #d.addBoth(lambda _: reactor.stop())
+    #reactor.run()
+    #print(d)
+    return jsonify("done")
 
 @app.route('/about')
 def about():
-    """Renders the about page."""
     return render_template(
         'about.html',
         title='About',
