@@ -3,7 +3,9 @@ from bs4 import BeautifulSoup as bs
 import scrapy
 from scrapy.crawler import CrawlerRunner, CrawlerProcess
 import time
+import json
 import requests
+from urllib.parse import urlparse
 
 class webscraping_demo(object):
     base_brickset_url = "https://brickset.com/sets/"
@@ -68,27 +70,37 @@ class LegoSet(scrapy.Item):
         link = scrapy.Field()
 
 class LegoSetPipeline(object):
-    items = []
-    start_time = None
     def open_spider(self, spider):
+        timestr = time.strftime("%Y%m%d-%H%M%S")
         self.start_time = time.time()
+        self.item_count = 0
+        self.file = open('AIMWebScraping/data/{}{}.json'.format("brickset_", timestr), 'w')
 
     def process_item(self, item, spider):
-        # This is normally where you would be running your database/save logic
-        self.items.append(item)
+        # This is normally where you would be running your post extraction logic and save to a database
+        line = json.dumps(dict(item)) + "\n"
+        self.file.write(line)
+        self.item_count += 1
         return item
 
     def close_spider(self, spider):
-        print("found " + str(len(self.items)) + " total sets in " + str(time.time() - self.start_time) + " seconds")
+        self.file.close()
+
+        print("found " + str(self.item_count) + " total sets in " + str(time.time() - self.start_time) + " seconds")
 
 class ScrapySpider(scrapy.Spider):
     name = "crawler"
-    #allowed_domains = ["https://brickset.com/"]
+    allowed_domains = ["brickset.com"]
     start_urls = ['https://brickset.com/sets/year-' + '2018']
 
     def parse(self, response):
+        parsed_uri = urlparse(response.request.url)
+        root_url = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)[:-1]
         for set_link in response.xpath('//article[contains(@class,"set")]/div[contains(@class,"meta")]/h1/a'):
-            yield LegoSet(name = set_link.xpath('text()').extract(), link = set_link.xpath('@href').extract())
+            set_name = set_link.xpath('text()').get()
+            set_url = root_url + str(set_link.xpath('@href').get())
+            print(set_url)
+            yield LegoSet(name = set_name, link = set_url)
 
         next_page = response.css('li.next a::attr("href")').get()
         print(next_page)

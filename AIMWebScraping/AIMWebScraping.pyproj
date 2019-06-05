@@ -38,6 +38,7 @@
   <ItemGroup>
     <Folder Include="AIMWebScraping\" />
     <Folder Include="AIMWebScraping\Demos\" />
+    <Folder Include="AIMWebScraping\data\" />
     <Folder Include="AIMWebScraping\static\" />
     <Folder Include="AIMWebScraping\static\content\" />
     <Folder Include="AIMWebScraping\static\fonts\" />
