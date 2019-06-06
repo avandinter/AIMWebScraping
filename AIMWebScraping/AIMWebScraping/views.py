@@ -54,7 +54,7 @@ def scrapy_test():
     year = request.args.get('year')
     #demo = spider(year)
     scrapy = demo.ScrapyExample()
-    scrapy.begin_scraping()
+    scrapy.begin_scraping(year)
 
     #runner = CrawlerRunner()
     #d = runner.crawl(demo.ScrapySpider)

@@ -5,10 +5,10 @@ from scrapy.crawler import CrawlerRunner, CrawlerProcess
 import time
 import json
 import requests
-from urllib.parse import urlparse
+from urllib.parse import urlparse, urljoin
 
 class webscraping_demo(object):
-    base_brickset_url = "https://brickset.com/sets/"
+    base_brickset_url = "https://brickset.com/"
     year_url = ""
 
     def __get_brickset(self, page = 1):
@@ -44,9 +44,12 @@ class webscraping_demo(object):
         start_time = time.time()
         total_sets = 0
         page_number = 1
+        
+        next_url = self.year_url
         while True:
-            response = self.__get_brickset(page_number)
-            if response.status_code != 200:
+            response = requests.get(next_url)
+
+            if response is None:
                 break
 
             page = bs(response.content, 'html.parser')
@@ -57,13 +60,21 @@ class webscraping_demo(object):
             for lego_set in page.find_all('article', class_="set"):
                 total_sets += 1
             page_number += 1
+            next_button = page.find("li", class_="next")
+
+            if next_button is not None and next_button.find("a") is not None:
+                next_url = urljoin(self.base_brickset_url, next_button.find("a")["href"])
+                print(str(next_url))
+                response = requests.get(next_url)
+            else:
+                break
 
         elapsed_time = time.time() - start_time
 
         return str(page_number) + " pages scanned, finding " + str(total_sets) + " total sets in " + str(elapsed_time) + " seconds"
 
     def __init__(self, year):
-        self.year_url = self.base_brickset_url + "/year-" + year
+        self.year_url = self.base_brickset_url + "/sets/year-" + year
 
 class LegoSet(scrapy.Item):
         name = scrapy.Field()
@@ -71,12 +82,14 @@ class LegoSet(scrapy.Item):
 
 class LegoSetPipeline(object):
     def open_spider(self, spider):
+        print("open spider")
         timestr = time.strftime("%Y%m%d-%H%M%S")
         self.start_time = time.time()
         self.item_count = 0
         self.file = open('AIMWebScraping/data/{}{}.json'.format("brickset_", timestr), 'w')
 
     def process_item(self, item, spider):
+        print("Process Item")
         # This is normally where you would be running your post extraction logic and save to a database
         line = json.dumps(dict(item)) + "\n"
         self.file.write(line)
@@ -85,15 +98,14 @@ class LegoSetPipeline(object):
 
     def close_spider(self, spider):
         self.file.close()
-
         print("found " + str(self.item_count) + " total sets in " + str(time.time() - self.start_time) + " seconds")
 
 class ScrapySpider(scrapy.Spider):
     name = "crawler"
     allowed_domains = ["brickset.com"]
-    start_urls = ['https://brickset.com/sets/year-' + '2018']
 
     def parse(self, response):
+        print("here")
         parsed_uri = urlparse(response.request.url)
         root_url = '{uri.scheme}://{uri.netloc}/'.format(uri=parsed_uri)[:-1]
         for set_link in response.xpath('//article[contains(@class,"set")]/div[contains(@class,"meta")]/h1/a'):
@@ -108,15 +120,17 @@ class ScrapySpider(scrapy.Spider):
             next_page = response.urljoin(next_page)
             yield scrapy.Request(next_page, callback=self.parse)
 
-
+    def __init__(self, year = '', *args, **kwargs):
+        self.start_urls = ["https://brickset.com/sets/year-" + year]
+        super(ScrapySpider, self).__init__(*args, **kwargs)
 
 class ScrapyExample(object):
-    def begin_scraping(self):
+    def begin_scraping(self, incoming_year):
         process = CrawlerProcess({
-        'USER_AGENT': 'scrapy',
+        'USER_AGENT': 'Mozilla/4.0 (compatible; MSIE 7.0; Windows NT 5.1)',
         'LOG_LEVEL': 'ERROR',
         'ITEM_PIPELINES': { 'AIMWebScraping.Demos.webscraping_demo.LegoSetPipeline': 100 }
         })
 
-        results = process.crawl(ScrapySpider)
+        results = process.crawl(ScrapySpider(), year = incoming_year)
         process.start()
