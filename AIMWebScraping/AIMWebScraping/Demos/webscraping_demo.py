@@ -1,4 +1,4 @@
-#import requests
+import uuid
 from bs4 import BeautifulSoup as bs
 import scrapy
 from scrapy.crawler import CrawlerRunner, CrawlerProcess
@@ -79,6 +79,7 @@ class webscraping_demo(object):
 class LegoSet(scrapy.Item):
         name = scrapy.Field()
         link = scrapy.Field()
+        year = scrapy.Field()
 
 class LegoSetPipeline(object):
     def open_spider(self, spider):
@@ -86,7 +87,7 @@ class LegoSetPipeline(object):
         timestr = time.strftime("%Y%m%d-%H%M%S")
         self.start_time = time.time()
         self.item_count = 0
-        self.file = open('AIMWebScraping/data/{}{}.json'.format("brickset_", timestr), 'w')
+        self.file = open('AIMWebScraping/data/{}{}{}{}.json'.format( "brickset", spider.running_year, "_",timestr), 'w')
 
     def process_item(self, item, spider):
         print("Process Item")
@@ -103,6 +104,7 @@ class LegoSetPipeline(object):
 class ScrapySpider(scrapy.Spider):
     name = "crawler"
     allowed_domains = ["brickset.com"]
+    running_year = ""
 
     def parse(self, response):
         print("here")
@@ -112,7 +114,7 @@ class ScrapySpider(scrapy.Spider):
             set_name = set_link.xpath('text()').get()
             set_url = root_url + str(set_link.xpath('@href').get())
             print(set_url)
-            yield LegoSet(name = set_name, link = set_url)
+            yield LegoSet(name = set_name, link = set_url, year = self.running_year)
 
         next_page = response.css('li.next a::attr("href")').get()
         print(next_page)
@@ -122,6 +124,7 @@ class ScrapySpider(scrapy.Spider):
 
     def __init__(self, year = '', *args, **kwargs):
         self.start_urls = ["https://brickset.com/sets/year-" + year]
+        self.running_year = year
         super(ScrapySpider, self).__init__(*args, **kwargs)
 
 class ScrapyExample(object):
@@ -131,6 +134,8 @@ class ScrapyExample(object):
         'LOG_LEVEL': 'ERROR',
         'ITEM_PIPELINES': { 'AIMWebScraping.Demos.webscraping_demo.LegoSetPipeline': 100 }
         })
+        num_year = int(incoming_year)
 
-        results = process.crawl(ScrapySpider(), year = incoming_year)
+        for run_year in range(num_year, num_year - 3, -1):
+            process.crawl(ScrapySpider(), year = str(run_year))
         process.start()
