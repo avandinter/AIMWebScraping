@@ -5,8 +5,7 @@ Routes and views for the flask application.
 from datetime import datetime
 from flask import render_template, request, jsonify
 from AIMWebScraping import app
-from AIMWebScraping.Demos import webscraping_demo as demo
-#from twisted.internet import reactor
+from AIMWebScraping.Demos import webscraping_demo as demo, brickset_full as brickset
 
 @app.route('/')
 @app.route('/home')
@@ -52,15 +51,14 @@ def scan_all_test():
 @app.route('/scrapy_test')
 def scrapy_test():
     year = request.args.get('year')
-    #demo = spider(year)
     scrapy = demo.ScrapyExample()
     scrapy.begin_scraping(year)
+    return jsonify("done")
 
-    #runner = CrawlerRunner()
-    #d = runner.crawl(demo.ScrapySpider)
-    #d.addBoth(lambda _: reactor.stop())
-    #reactor.run()
-    #print(d)
+@app.route('/full_brickset')
+def full_brickset():
+    scrapy = brickset.brickset_full()
+    scrapy.begin_scraping()
     return jsonify("done")
 
 @app.route('/about')

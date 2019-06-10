@@ -28,6 +28,9 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
+    <Compile Include="AIMWebScraping\Demos\brickset_full.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="AIMWebScraping\Demos\webscraping_demo.py">
       <SubType>Code</SubType>
     </Compile>
@@ -37,6 +40,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AIMWebScraping\" />
+    <Folder Include="AIMWebScraping\data\fullscrape\" />
     <Folder Include="AIMWebScraping\Demos\" />
     <Folder Include="AIMWebScraping\data\" />
     <Folder Include="AIMWebScraping\static\" />

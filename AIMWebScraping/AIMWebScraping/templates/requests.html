@@ -61,6 +61,20 @@
 		});
 	})
 </script>
+
+<script type=text/javascript>
+	$(function () {
+		$('a#full').click(function () {
+			$.ajax({
+				url: '/full_brickset',
+				success: function (data) {
+					console.log('get info');
+					$('#results2').html(JSON.stringify(data, null, '   '));
+				}
+			});
+		});
+	})
+</script>
 {% endblock %}
 {% block content %}
 
@@ -77,6 +91,7 @@
 	<a href=# id=soup><button class='btn btn-default'>Beautiful Soup</button></a>
 	<a href=# id=allbs><button class='btn btn-default'>Crawl and Scrape with Requests and BS</button></a>
 	<a href=# id=scrapy><button class='btn btn-default'>Crawl and Scrape with Scrapy</button></a>
+	<a href=# id=full><button class='btn btn-default'>Full Brickset</button></a>
 	<span id=result></span>
 
 	<p id="results2"></p>

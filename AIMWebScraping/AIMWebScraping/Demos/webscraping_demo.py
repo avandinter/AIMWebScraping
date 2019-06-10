@@ -31,11 +31,8 @@ class webscraping_demo(object):
 
         for lego_set in page.find_all('article', class_="set"):
             set_link = lego_set.find('div', {'class':'meta'}).h1.a
-
-            results += "-----------------------------<br />"
             results += "Set: " + set_link.text
-            results += '<br />' 
-            results += "URL: " + set_link['href']
+            results += "        --      URL: " + set_link['href']
             results += '<br />'
 
         return results
