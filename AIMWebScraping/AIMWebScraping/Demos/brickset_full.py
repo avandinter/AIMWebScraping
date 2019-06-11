@@ -26,9 +26,7 @@ class TransformationPipeline(object):
 
 class SaverPipeline(object):
     def open_spider(self, spider):
-        timestr = time.strftime("%Y%m%d-%H%M%S")
-        self.start_time = time.time()
-        self.file = open('AIMWebScraping/data/fullscrape/{}{}{}{}.json'.format( "brickset", spider.running_year, "_full_",timestr), 'w')
+        self.file = open('AIMWebScraping/data/fullscrape/{}{}.json'.format( "brickset_", spider.running_year), 'w')
 
     def process_item(self, item, spider):
         line = json.dumps(dict(item)) + "\n"
@@ -93,6 +91,7 @@ class brickset_full(object):
         'USER_AGENT': random.choice(self.USER_AGENTS),
         'LOG_LEVEL': 'ERROR',
         #'CONCURRENT_REQUESTS' : 5,
+        #'TELNETCONSOLE_PORT': None,
         'ITEM_PIPELINES': { 'AIMWebScraping.Demos.brickset_full.TransformationPipeline': 100, 'AIMWebScraping.Demos.brickset_full.SaverPipeline': 200 }
         })
 
