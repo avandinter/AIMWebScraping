@@ -10,8 +10,18 @@ import time
 import json
 import requests
 from scrapy.http import HtmlResponse
+from scrapy_splash import SplashRequest
+
+#Selenium
+from selenium.webdriver.common.by import By
+from selenium import webdriver
+from selenium.webdriver.chrome.options import Options
+import chromedriver_binary
+from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.support.ui import WebDriverWait
 
 DATABASE = 'AIMWebScraping/data/fullscrape/brickset.db'
+USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'
 
 class LegoSet(scrapy.Item):
     number = scrapy.Field()
@@ -69,7 +79,11 @@ class SaverPipeline(object):
 
     def process_item(self, item, spider):
         if item is not None:
-            line = json.dumps(dict(item)) + "\n"
+            items = dict(item)
+            for field in items:
+                items[field] = str(item[field])
+
+            line = json.dumps(items) + "\n"
             print(line)
             self.file.write(line)
         return item
@@ -88,16 +102,29 @@ class BricksetSpider(scrapy.Spider):
     running_year = ""
 
     def parse_price_page(self, response):
+        url = response.url
+
+        if not url.endswith("#T=P"):
+            url = url.split("#", 1)[0] + "#T=P"
+        self.driver.get(url)
+
         item = response.meta['item']
-        item["new_current_min"] = "15.60"
-        print(response.status)
-        print(response.xpath("//body/text()").get())
-        new_table = response.xpath("(//table[contains(@class, 'pcipgSummaryTable')])[3]")
-        used_table = response.xpath("(//table[contains(@class, 'pcipgSummaryTable')])[3]")
-        item["new_current_min"] = new_table.xpath("/tbody/tr/td[text()='Min Price:']/following-sibling::*/text()").get()
-        item["new_current_avg"] = new_table.xpath("/tbody/tr/td[text()='Avg Price:']/following-sibling::*/text()").get()
-        item["used_current_min"] = used_table.xpath("/tbody/tr/td[text()='Min Price:']/following-sibling::*/text()").get()
-        item["used_current_avg"] = used_table.xpath("/tbody/tr/td[text()='Avg Price:']/following-sibling::*/text()").get()
+
+        summary_table = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//table[contains(@class, 'pcipgSummaryTable')]")))
+
+        new_table = summary_table.find_element_by_xpath("../../../descendant::tr[3]/td[3]")
+        used_table = summary_table.find_element_by_xpath("../../../descendant::tr[3]/td[4]")
+
+        min_price_xpath = "//tbody/tr/td[text()='Min Price:']/following-sibling::*/b"
+        avg_price_xpath = "//tbody/tr/td[text()='Avg Price:']/following-sibling::*/b"
+
+        if new_table is not None:
+            item["new_current_min"] = new_table.find_element_by_xpath(min_price_xpath).text
+            item["new_current_avg"] = new_table.find_element_by_xpath(avg_price_xpath).text
+
+        if used_table is not None:
+            item["used_current_min"] = used_table.find_element_by_xpath(min_price_xpath).text
+            item["used_current_avg"] = used_table.find_element_by_xpath(avg_price_xpath).text
 
         yield item
 
@@ -110,7 +137,6 @@ class BricksetSpider(scrapy.Spider):
         item["name"] = response.xpath("//dt[text()='Name']/following-sibling::*/text()").get()
         
         if price_link is not None:
-           # print(price_link)
             request = scrapy.Request(price_link, callback=self.parse_price_page)
             request.meta["item"] = item
             yield request
@@ -139,19 +165,25 @@ class BricksetSpider(scrapy.Spider):
         else:
             yield None
 
+    def spider_closed(self, spider):
+        self.driver.quit()
+
     def __init__(self, begin_url = '', begin_year = '', *args, **kwargs):
         self.start_urls = [begin_url]
         self.running_year = begin_year
+        options = Options()
+        options.headless = True
+        self.driver = webdriver.Chrome(chrome_options=options)
         super(BricksetSpider, self).__init__(*args, **kwargs)
 
 class brickset_full(object):
 
     def begin_scraping(self):
         process = CrawlerProcess({
-        'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36',
+        'USER_AGENT': USER_AGENT,
         'LOG_LEVEL': 'ERROR',
-        'CONCURRENT_REQUESTS' : 2,
-        'DOWNLOAD_DELAY' : 2,
+        'CONCURRENT_REQUESTS' : 1,
+        'DOWNLOAD_DELAY' : 1,
         'ROBOTSTXT_OBEY' : False,
         #'TELNETCONSOLE_PORT': None,
         'ITEM_PIPELINES': { 'AIMWebScraping.Demos.brickset_full.TransformationPipeline': 100, 
