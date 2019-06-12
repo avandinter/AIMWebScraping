@@ -34,7 +34,7 @@ class TransformationPipeline(object):
         item[field_name] = val
 
     def process_item(self, item, spider):
-        print(item['year'] + " -- " + item['name'])
+        #print(item['year'] + " -- " + item['name'])
         self.convert_to_decmial(item, "new_current_min")
         self.convert_to_decmial(item, "new_current_avg")
         self.convert_to_decmial(item, "used_current_min")
@@ -70,6 +70,7 @@ class SaverPipeline(object):
     def process_item(self, item, spider):
         if item is not None:
             line = json.dumps(dict(item)) + "\n"
+            print(line)
             self.file.write(line)
         return item
 
@@ -89,7 +90,8 @@ class BricksetSpider(scrapy.Spider):
     def parse_price_page(self, response):
         item = response.meta['item']
         item["new_current_min"] = "15.60"
-        print(item["number"])
+        print(response.status)
+        print(response.xpath("//body/text()").get())
         new_table = response.xpath("(//table[contains(@class, 'pcipgSummaryTable')])[3]")
         used_table = response.xpath("(//table[contains(@class, 'pcipgSummaryTable')])[3]")
         item["new_current_min"] = new_table.xpath("/tbody/tr/td[text()='Min Price:']/following-sibling::*/text()").get()
@@ -108,7 +110,7 @@ class BricksetSpider(scrapy.Spider):
         item["name"] = response.xpath("//dt[text()='Name']/following-sibling::*/text()").get()
         
         if price_link is not None:
-            print(price_link)
+           # print(price_link)
             request = scrapy.Request(price_link, callback=self.parse_price_page)
             request.meta["item"] = item
             yield request
@@ -148,8 +150,8 @@ class brickset_full(object):
         process = CrawlerProcess({
         'USER_AGENT': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36',
         'LOG_LEVEL': 'ERROR',
-        #'CONCURRENT_REQUESTS' : 1,
-        #'DOWNLOAD_DELAY' : 5,
+        'CONCURRENT_REQUESTS' : 2,
+        'DOWNLOAD_DELAY' : 2,
         'ROBOTSTXT_OBEY' : False,
         #'TELNETCONSOLE_PORT': None,
         'ITEM_PIPELINES': { 'AIMWebScraping.Demos.brickset_full.TransformationPipeline': 100, 
@@ -165,7 +167,7 @@ class brickset_full(object):
         for col in year_container.find_all("div", class_='col'):
             if col is not None:
                 for year_url in col.find_all('a'):
-                    print(year_url.text)
+                    #print(year_url.text)
                     if year_url.text == '2018':
                         process.crawl(BricksetSpider(), begin_url = urljoin("https://brickset.com/", year_url["href"]), begin_year = year_url.text)
         process.start()
