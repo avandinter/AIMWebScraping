@@ -19,6 +19,7 @@ from selenium.webdriver.chrome.options import Options
 import chromedriver_binary
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
+from selenium.common.exceptions import TimeoutException
 
 DATABASE = 'AIMWebScraping/data/fullscrape/brickset.db'
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'
@@ -36,7 +37,7 @@ class LegoSet(scrapy.Item):
 class TransformationPipeline(object):
     def convert_to_decmial(self, item, field_name):
         val = item[field_name]
-        if val is not None:
+        if val is not None and val != "-":
             val = val.replace("US $", "")
             val = Decimal(val)
         else:
@@ -57,8 +58,8 @@ class NotificationPipeline(object):
         min_field_name = "new_current_min" if is_new else "used_current_min"
         avg_field_name = "new_current_avg" if is_new else "used_current_avg"
 
-        if item[avg_field_name] * Decimal(.90) > item[min_field_name]:
-            print("{} {} : {} has a current minimum price of {} with an average price of {}".format("New" if is_new else "Used", item["number"], item["name"], str(min_field_name), str(avg_field_name)))
+        if item[avg_field_name] * Decimal(.80) > item[min_field_name]:
+            print("{} {} : {} has a current minimum price of {} with an average price of {}".format("New" if is_new else "Used", item["number"], item["name"], item[str(min_field_name)], item[str(avg_field_name)]))
 
     def process_item(self, item, spider):
         self.compare_and_notify(item, True)
@@ -84,7 +85,7 @@ class SaverPipeline(object):
                 items[field] = str(item[field])
 
             line = json.dumps(items) + "\n"
-            print(line)
+            #print(line)
             self.file.write(line)
         return item
 
@@ -109,22 +110,23 @@ class BricksetSpider(scrapy.Spider):
         self.driver.get(url)
 
         item = response.meta['item']
+        try:
+            summary_table = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//table[contains(@class, 'pcipgSummaryTable')]")))
+            new_table = summary_table.find_element_by_xpath("../../../descendant::tr[3]/td[3]")
+            used_table = summary_table.find_element_by_xpath("../../../descendant::tr[3]/td[4]")
 
-        summary_table = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//table[contains(@class, 'pcipgSummaryTable')]")))
+            min_price_xpath = "//tbody/tr/td[text()='Min Price:']/following-sibling::*/b"
+            avg_price_xpath = "//tbody/tr/td[text()='Avg Price:']/following-sibling::*/b"
 
-        new_table = summary_table.find_element_by_xpath("../../../descendant::tr[3]/td[3]")
-        used_table = summary_table.find_element_by_xpath("../../../descendant::tr[3]/td[4]")
+            if new_table is not None:
+                item["new_current_min"] = new_table.find_element_by_xpath(min_price_xpath).text
+                item["new_current_avg"] = new_table.find_element_by_xpath(avg_price_xpath).text
 
-        min_price_xpath = "//tbody/tr/td[text()='Min Price:']/following-sibling::*/b"
-        avg_price_xpath = "//tbody/tr/td[text()='Avg Price:']/following-sibling::*/b"
-
-        if new_table is not None:
-            item["new_current_min"] = new_table.find_element_by_xpath(min_price_xpath).text
-            item["new_current_avg"] = new_table.find_element_by_xpath(avg_price_xpath).text
-
-        if used_table is not None:
-            item["used_current_min"] = used_table.find_element_by_xpath(min_price_xpath).text
-            item["used_current_avg"] = used_table.find_element_by_xpath(avg_price_xpath).text
+            if used_table is not None:
+                item["used_current_min"] = used_table.find_element_by_xpath(min_price_xpath).text
+                item["used_current_avg"] = used_table.find_element_by_xpath(avg_price_xpath).text
+        except TimeoutException:
+            print("driver timed out")
 
         yield item
 
@@ -183,7 +185,7 @@ class brickset_full(object):
         'USER_AGENT': USER_AGENT,
         'LOG_LEVEL': 'ERROR',
         'CONCURRENT_REQUESTS' : 1,
-        'DOWNLOAD_DELAY' : 1,
+        'DOWNLOAD_DELAY' : 5,
         'ROBOTSTXT_OBEY' : False,
         #'TELNETCONSOLE_PORT': None,
         'ITEM_PIPELINES': { 'AIMWebScraping.Demos.brickset_full.TransformationPipeline': 100, 
