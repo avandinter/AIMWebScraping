@@ -65,29 +65,29 @@ class NotificationPipeline(object):
                 "sections": [{
                     "activityTitle": "A Lego Set Has a Lower than Average Price",
                     "activitySubtitle":  datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
-                    "activityImage": item["image_url"],
                     "facts": [{
-                        "name": "Set Number",
-                        "value": item["number"]
-                    }, {
                         "name": "Set Name",
-                        "value": item["name"]
-                    }, {
+                        "value": "**%s**" % item["name"]
+                    },{
+                        "name": "Set Number",
+                        "value": "**%s**" % item["number"]
+                    },{
                         "name": "Condition",
                         "value": "New" if is_new else "Used"
                     },{
                         "name": "Year",
                         "value": item["year"]
-                    }, {
+                    },{
                         "name": "Min Price",
-                        "value": str(item["new_current_min"] if is_new else item["used_current_min"])
+                        "value": "$%s USD" % str(item["new_current_min"] if is_new else item["used_current_min"])
                     },{
                         "name": "Avg Price",
-                        "value": str(item["new_current_avg"] if is_new else item["used_current_avg"])
+                        "value": "$%s USD" % str(item["new_current_avg"] if is_new else item["used_current_avg"])
                     },{
                         "name": "Url",
                         "value": "[BrickLink %s](%s)" % (item["number"], item["link"])
                     }],
+                    "text": '<img style="max-width:300px;" src="%s" alt="%s"></img>' % (item["image_url"], item["name"]),
                     "markdown": True
                 }]
             }
