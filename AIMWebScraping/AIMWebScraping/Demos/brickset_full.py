@@ -11,6 +11,7 @@ import json
 import requests
 from scrapy.http import HtmlResponse
 from scrapy_splash import SplashRequest
+import datetime
 
 #Selenium
 from selenium.webdriver.common.by import By
@@ -23,12 +24,14 @@ from selenium.common.exceptions import TimeoutException
 
 DATABASE = 'AIMWebScraping/data/fullscrape/brickset.db'
 USER_AGENT = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/55.0.2883.95 Safari/537.36'
+WEBHOOK_URL = "https://outlook.office.com/webhook/dd2566ec-1cc8-45c8-a06a-bc898263f53b@833b2b67-7fd5-4644-a0a2-4b89f0bebe77/IncomingWebhook/9ff35e8854cd49819bef89c764981cb5/fcba8add-659a-4606-84d4-298bc00ddc4c"
 
 class LegoSet(scrapy.Item):
     number = scrapy.Field()
     name = scrapy.Field()
     link = scrapy.Field()
     year = scrapy.Field()
+    image_url = scrapy.Field()
     new_current_min = scrapy.Field()
     new_current_avg = scrapy.Field()
     used_current_min = scrapy.Field()
@@ -45,7 +48,6 @@ class TransformationPipeline(object):
         item[field_name] = val
 
     def process_item(self, item, spider):
-        #print(item['year'] + " -- " + item['name'])
         self.convert_to_decmial(item, "new_current_min")
         self.convert_to_decmial(item, "new_current_avg")
         self.convert_to_decmial(item, "used_current_min")
@@ -54,12 +56,51 @@ class TransformationPipeline(object):
         return item
 
 class NotificationPipeline(object):
+    def create_teams_message(self, item, is_new):
+        return {
+                "@type": "MessageCard",
+                "@context": "http://schema.org/extensions",
+                "themeColor": "0076D7",
+                "summary": "A Lego Set Has a Lower than Average Price",
+                "sections": [{
+                    "activityTitle": "A Lego Set Has a Lower than Average Price",
+                    "activitySubtitle":  datetime.datetime.now().strftime("%Y-%m-%d %H:%M"),
+                    "activityImage": item["image_url"],
+                    "facts": [{
+                        "name": "Set Number",
+                        "value": item["number"]
+                    }, {
+                        "name": "Set Name",
+                        "value": item["name"]
+                    }, {
+                        "name": "Condition",
+                        "value": "New" if is_new else "Used"
+                    },{
+                        "name": "Year",
+                        "value": item["year"]
+                    }, {
+                        "name": "Min Price",
+                        "value": str(item["new_current_min"] if is_new else item["used_current_min"])
+                    },{
+                        "name": "Avg Price",
+                        "value": str(item["new_current_avg"] if is_new else item["used_current_avg"])
+                    },{
+                        "name": "Url",
+                        "value": item["link"]
+                    }],
+                    "markdown": True
+                }]
+            }
+
     def compare_and_notify(self, item, is_new):
         min_field_name = "new_current_min" if is_new else "used_current_min"
         avg_field_name = "new_current_avg" if is_new else "used_current_avg"
 
         if item[avg_field_name] * Decimal(.80) > item[min_field_name]:
-            print("{} {} : {} has a current minimum price of {} with an average price of {}".format("New" if is_new else "Used", item["number"], item["name"], item[str(min_field_name)], item[str(avg_field_name)]))
+            response = requests.post(
+                WEBHOOK_URL, data=json.dumps(self.create_teams_message(item, is_new)),
+                headers={'Content-Type': 'application/json'}
+            )
 
     def process_item(self, item, spider):
         self.compare_and_notify(item, True)
@@ -68,14 +109,6 @@ class NotificationPipeline(object):
 
 class SaverPipeline(object):
     def open_spider(self, spider):
-        #self.connection = sqlite.connect(DATABASE)
-        #self.cursor = self.connection.cursor()
-        #self.cursor.execute("CREATE TABLE IF NOT EXISTS legodata " \
-        #    "(id INTEGER PRIMARY KEY, " \
-        #    "url VARCHAR(500), " \
-        #    "set_number VARCHAR(100), " \
-        #    "year smallint, " \
-        #    "desc VARCHAR(500))")
         self.file = open('AIMWebScraping/data/fullscrape/{}{}.json'.format( "brickset_", spider.running_year), 'w')
 
     def process_item(self, item, spider):
@@ -85,14 +118,10 @@ class SaverPipeline(object):
                 items[field] = str(item[field])
 
             line = json.dumps(items) + "\n"
-            #print(line)
             self.file.write(line)
         return item
 
     def close_spider(self, spider):
-       # self.db = getattr(g, '_database', None)
-       # if self.db is not None:
-        #    self.db.close()
         self.file.close()
 
 
@@ -110,13 +139,14 @@ class BricksetSpider(scrapy.Spider):
         self.driver.get(url)
 
         item = response.meta['item']
+        item["link"] = str(response.url)
         try:
             summary_table = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//table[contains(@class, 'pcipgSummaryTable')]")))
-            new_table = summary_table.find_element_by_xpath("../../../descendant::tr[3]/td[3]")
-            used_table = summary_table.find_element_by_xpath("../../../descendant::tr[3]/td[4]")
+            new_table = self.driver.find_element_by_xpath("(//table[contains(@class, 'pcipgSummaryTable')])[3]")
+            used_table = summary_table.find_element_by_xpath("(//table[contains(@class, 'pcipgSummaryTable')])[4]")
 
-            min_price_xpath = "//tbody/tr/td[text()='Min Price:']/following-sibling::*/b"
-            avg_price_xpath = "//tbody/tr/td[text()='Avg Price:']/following-sibling::*/b"
+            min_price_xpath = ".//tbody/tr/td[text()='Min Price:']/following-sibling::*/b"
+            avg_price_xpath = ".//tbody/tr/td[text()='Avg Price:']/following-sibling::*/b"
 
             if new_table is not None:
                 item["new_current_min"] = new_table.find_element_by_xpath(min_price_xpath).text
@@ -125,6 +155,12 @@ class BricksetSpider(scrapy.Spider):
             if used_table is not None:
                 item["used_current_min"] = used_table.find_element_by_xpath(min_price_xpath).text
                 item["used_current_avg"] = used_table.find_element_by_xpath(avg_price_xpath).text
+
+            print(str(response.url))
+            print(str(item["new_current_min"]))
+            print(str(item["used_current_min"]))
+            print("==============================")
+
         except TimeoutException:
             print("driver timed out")
 
@@ -133,11 +169,11 @@ class BricksetSpider(scrapy.Spider):
     def parse_set_page(self, response):
         item = response.meta['item']
         price_link = response.xpath("///dt[text()='Current value']/following-sibling::*/a/@href").get()
-        item["link"] = str(price_link)
         item["year"] = self.running_year
         item["number"] = response.xpath("//dt[text()='Set number']/following-sibling::*/text()").get()
         item["name"] = response.xpath("//dt[text()='Name']/following-sibling::*/text()").get()
-        
+        item["image_url"] = urljoin("https://images.brickset.com/sets/images/", item["number"] + ".jpg")
+
         if price_link is not None:
             request = scrapy.Request(price_link, callback=self.parse_price_page)
             request.meta["item"] = item

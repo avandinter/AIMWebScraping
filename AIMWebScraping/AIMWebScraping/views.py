@@ -1,7 +1,3 @@
-"""
-Routes and views for the flask application.
-"""
-
 from datetime import datetime
 from flask import render_template, request, jsonify
 from AIMWebScraping import app
@@ -10,7 +6,6 @@ from AIMWebScraping.Demos import webscraping_demo as demo, brickset_full as bric
 @app.route('/')
 @app.route('/home')
 def home():
-    """Renders the home page."""
     return render_template(
         'index.html',
         title='Home Page',
