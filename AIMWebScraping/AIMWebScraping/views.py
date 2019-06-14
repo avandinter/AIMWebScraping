@@ -2,6 +2,7 @@ from datetime import datetime
 from flask import render_template, request, jsonify
 from AIMWebScraping import app
 from AIMWebScraping.Demos import webscraping_demo as demo, brickset_full as brickset
+from AIMWebScraping.lego_price_scraper import init
 
 @app.route('/')
 @app.route('/home')
@@ -52,8 +53,9 @@ def scrapy_test():
 
 @app.route('/full_brickset')
 def full_brickset():
-    scrapy = brickset.brickset_full()
-    scrapy.begin_scraping()
+    init.LegoPriceScraper().begin_scraping()
+    #scrapy = brickset.brickset_full()
+    #scrapy.begin_scraping()
     return jsonify("done")
 
 @app.route('/about')

@@ -34,6 +34,26 @@
     <Compile Include="AIMWebScraping\Demos\webscraping_demo.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AIMWebScraping\lego_price_scraper\init.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AIMWebScraping\lego_price_scraper\items.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AIMWebScraping\lego_price_scraper\pipelines\save.py" />
+    <Compile Include="AIMWebScraping\lego_price_scraper\pipelines\evaluation.py" />
+    <Compile Include="AIMWebScraping\lego_price_scraper\pipelines\notification.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AIMWebScraping\lego_price_scraper\pipelines\transformation.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AIMWebScraping\lego_price_scraper\settings.py">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Include="AIMWebScraping\lego_price_scraper\spider.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="runserver.py" />
     <Compile Include="AIMWebScraping\__init__.py" />
     <Compile Include="AIMWebScraping\views.py" />
@@ -43,6 +63,9 @@
     <Folder Include="AIMWebScraping\data\fullscrape\" />
     <Folder Include="AIMWebScraping\Demos\" />
     <Folder Include="AIMWebScraping\data\" />
+    <Folder Include="AIMWebScraping\lego_price_scraper\" />
+    <Folder Include="AIMWebScraping\lego_price_scraper\logs\" />
+    <Folder Include="AIMWebScraping\lego_price_scraper\pipelines\" />
     <Folder Include="AIMWebScraping\static\" />
     <Folder Include="AIMWebScraping\static\content\" />
     <Folder Include="AIMWebScraping\static\fonts\" />

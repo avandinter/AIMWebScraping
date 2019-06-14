@@ -143,19 +143,21 @@ class BricksetSpider(scrapy.Spider):
         item["bricklink_url"] = str(response.url)
         try:
             summary_table = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//table[contains(@class, 'pcipgSummaryTable')]")))
-            new_table = self.driver.find_element_by_xpath("(//table[contains(@class, 'pcipgSummaryTable')])[3]")
-            used_table = summary_table.find_element_by_xpath("(//table[contains(@class, 'pcipgSummaryTable')])[4]")
+            sold_new_table = self.driver.find_element_by_xpath("(//table[contains(@class, 'pcipgSummaryTable')])[1]")
+            sold_used_table = summary_table.find_element_by_xpath("(//table[contains(@class, 'pcipgSummaryTable')])[2]")
+            current_new_table = self.driver.find_element_by_xpath("(//table[contains(@class, 'pcipgSummaryTable')])[3]")
+            current_used_table = summary_table.find_element_by_xpath("(//table[contains(@class, 'pcipgSummaryTable')])[4]")
 
             min_price_xpath = ".//tbody/tr/td[text()='Min Price:']/following-sibling::*/b"
             avg_price_xpath = ".//tbody/tr/td[text()='Avg Price:']/following-sibling::*/b"
 
             if new_table is not None:
                 item["new_current_min"] = new_table.find_element_by_xpath(min_price_xpath).text
-                item["new_current_avg"] = new_table.find_element_by_xpath(avg_price_xpath).text
+                item["new_current_avg"] = sold_new_table.find_element_by_xpath(avg_price_xpath).text
 
             if used_table is not None:
                 item["used_current_min"] = used_table.find_element_by_xpath(min_price_xpath).text
-                item["used_current_avg"] = used_table.find_element_by_xpath(avg_price_xpath).text
+                item["used_current_avg"] = sold_used_table.find_element_by_xpath(avg_price_xpath).text
 
             print(str(response.url))
             print(str(item["new_current_min"]))
