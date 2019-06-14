@@ -1,7 +1,7 @@
 from datetime import datetime
 from flask import render_template, request, jsonify
 from AIMWebScraping import app
-from AIMWebScraping.Demos import webscraping_demo as demo, brickset_full as brickset
+from AIMWebScraping.Demos import webscraping_demo as demo
 from AIMWebScraping.lego_price_scraper import init
 
 @app.route('/')
