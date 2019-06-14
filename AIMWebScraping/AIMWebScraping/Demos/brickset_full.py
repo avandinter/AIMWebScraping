@@ -86,7 +86,7 @@ class NotificationPipeline(object):
                         "value": str(item["new_current_avg"] if is_new else item["used_current_avg"])
                     },{
                         "name": "Url",
-                        "value": item["link"]
+                        "value": "[BrickLink %s](%s)" % (item["number"], item["link"])
                     }],
                     "markdown": True
                 }]
@@ -109,7 +109,7 @@ class NotificationPipeline(object):
 
 class SaverPipeline(object):
     def open_spider(self, spider):
-        self.file = open('AIMWebScraping/data/fullscrape/{}{}.json'.format( "brickset_", spider.running_year), 'w')
+        self.file = open('AIMWebScraping/data/fullscrape/brickset_%s.json' % spider.running_year, 'w')
 
     def process_item(self, item, spider):
         if item is not None:
