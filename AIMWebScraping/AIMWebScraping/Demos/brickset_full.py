@@ -29,7 +29,8 @@ WEBHOOK_URL = "https://outlook.office.com/webhook/dd2566ec-1cc8-45c8-a06a-bc8982
 class LegoSet(scrapy.Item):
     number = scrapy.Field()
     name = scrapy.Field()
-    link = scrapy.Field()
+    bricklink_url = scrapy.Field()
+    brickset_url = scrapy.Field()
     year = scrapy.Field()
     image_url = scrapy.Field()
     new_current_min = scrapy.Field()
@@ -85,9 +86,9 @@ class NotificationPipeline(object):
                         "value": "$%s USD" % str(item["new_current_avg"] if is_new else item["used_current_avg"])
                     },{
                         "name": "Url",
-                        "value": "[BrickLink %s](%s)" % (item["number"], item["link"])
+                        "value": "- [BrickLink](%s) \r- [BrickSet](%s) \r" % (item["bricklink_url"], item["brickset_url"])
                     }],
-                    "text": '<img style="max-width:300px;" src="%s" alt="%s"></img>' % (item["image_url"], item["name"]),
+                    "text": '[<img style="max-width:300px;" src="%s" alt="%s"></img>](%s)' % (item["image_url"], item["name"], item["bricklink_url"]),
                     "markdown": True
                 }]
             }
@@ -139,7 +140,7 @@ class BricksetSpider(scrapy.Spider):
         self.driver.get(url)
 
         item = response.meta['item']
-        item["link"] = str(response.url)
+        item["bricklink_url"] = str(response.url)
         try:
             summary_table = WebDriverWait(self.driver, 3).until(EC.presence_of_element_located((By.XPATH, "//table[contains(@class, 'pcipgSummaryTable')]")))
             new_table = self.driver.find_element_by_xpath("(//table[contains(@class, 'pcipgSummaryTable')])[3]")
@@ -168,6 +169,7 @@ class BricksetSpider(scrapy.Spider):
 
     def parse_set_page(self, response):
         item = response.meta['item']
+        item["brickset_url"] = response.url
         price_link = response.xpath("///dt[text()='Current value']/following-sibling::*/a/@href").get()
         item["year"] = self.running_year
         item["number"] = response.xpath("//dt[text()='Set number']/following-sibling::*/text()").get()
@@ -220,10 +222,8 @@ class brickset_full(object):
         process = CrawlerProcess({
         'USER_AGENT': USER_AGENT,
         'LOG_LEVEL': 'ERROR',
-        'CONCURRENT_REQUESTS' : 1,
+        'CONCURRENT_REQUESTS' : 5,
         'DOWNLOAD_DELAY' : 5,
-        'ROBOTSTXT_OBEY' : False,
-        #'TELNETCONSOLE_PORT': None,
         'ITEM_PIPELINES': { 'AIMWebScraping.Demos.brickset_full.TransformationPipeline': 100, 
                            'AIMWebScraping.Demos.brickset_full.NotificationPipeline': 200, 
                            'AIMWebScraping.Demos.brickset_full.SaverPipeline': 300 }
@@ -237,7 +237,6 @@ class brickset_full(object):
         for col in year_container.find_all("div", class_='col'):
             if col is not None:
                 for year_url in col.find_all('a'):
-                    #print(year_url.text)
                     if year_url.text == '2018':
                         process.crawl(BricksetSpider(), begin_url = urljoin("https://brickset.com/", year_url["href"]), begin_year = year_url.text)
         process.start()
