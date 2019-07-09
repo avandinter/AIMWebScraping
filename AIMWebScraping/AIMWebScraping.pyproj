@@ -72,6 +72,7 @@
     <Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\AIMWebScraping\Demos\" />-->
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AIMWebScraping\templates\definitions.html" />
     <Content Include="requirements.txt" />
     <Content Include="AIMWebScraping\static\content\bootstrap.css" />
     <Content Include="AIMWebScraping\static\content\bootstrap.min.css" />

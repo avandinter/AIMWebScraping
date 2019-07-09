@@ -1,0 +1,144 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}.</h2>
+<h3>{{ message }}</h3>
+
+<div class="panel-group" id="definition_accordion">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title">
+				<a data-toggle="collapse" data-parent="#definition_accordion" href="#collapse_crawler">
+					Web crawler/Spider
+				</a>
+			</h2>
+		</div>
+		<div id="collapse_crawler" class="panel-collapse collapse">
+			<br />
+			<blockquote>
+				<p>A bot that systematically browses the internet with the intent of indexing pages</p>
+			</blockquote>
+
+				<div class="panel-group" id="crawler_accordion" style="padding: 10px;">
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_crawler_selection">
+									Selection Policy
+								</a>
+							</h4>
+						</div>
+						<div id="collapse_crawler_selection" class="panel-collapse collapse">
+							<blockquote>
+								<p>States how a given bot evaluates the importance of a given page for the purpose of prioritization</p>
+							</blockquote>
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_crawler_revisit">
+									Revisit Policy
+								</a>
+							</h4>
+						</div>
+						<div id="collapse_crawler_revisit" class="panel-collapse collapse">
+							<blockquote>
+								<p>States how frequently a given bot will go back to a previously indexed page to detect changes</p>
+							</blockquote>
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_crawler_polite">
+									Politeness Policy
+								</a>
+							</h4>
+						</div>
+						<div id="collapse_crawler_polite" class="panel-collapse collapse">
+							<blockquote>
+								<p>States how the bot will avoid overloading pages or cause undue stress on a web server</p>
+							</blockquote>
+						</div>
+					</div>
+					<div class="panel panel-default">
+						<div class="panel-heading">
+							<h4 class="panel-title">
+								<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_crawler_parallelization">
+									Parallelization Policy
+								</a>
+							</h4>
+						</div>
+						<div id="collapse_crawler_parallelization" class="panel-collapse collapse">
+							<blockquote>
+								<p>Defines how bots are distributed and coordinated</p>
+							</blockquote>
+						</div>
+					</div>
+				</div>
+		</div>
+	</div>
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title">
+				<a data-toggle="collapse" data-parent="#definition_accordion" href="#collapse_scraper">
+					Web scraper
+				</a>
+			</h2>
+		</div>
+		<div id="collapse_scraper" class="panel-collapse collapse">
+			<br />
+			<blockquote>
+				<p>The process of extracting information such as images, pricing information, or text from web pages</p>
+			</blockquote>
+			<div class="panel-group" id="scraper_accordion">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#scraper_accordion" href="#collapse_scraper_human">
+								Human Copy and Paste
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_scraper_human" class="panel-collapse collapse">
+						<blockquote>
+							<p>The manual extraction of information from a page. This will sometimes be required if a page creates barriers against automated scraping</p>
+						</blockquote>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#scraper_accordion" href="#collapse_scraper_pattern">
+								Text Pattern Matching
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_scraper_pattern" class="panel-collapse collapse">
+						<blockquote>
+							<p>Using patterns to extract specific information from a web page, this is usually facilitated by regular expressions</p>
+						</blockquote>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#scraper_accordion" href="#collapse_scraper_http">
+								HTTP Programming and parsing
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_scraper_http" class="panel-collapse collapse">
+						<blockquote>
+							<p>Retrieving the HTTP response from a given url request and parsing that response to scrape content</p>
+						</blockquote>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

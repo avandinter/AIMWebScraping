@@ -23,6 +23,14 @@ def requests_demo():
         message = ""
     )
 
+@app.route('/information/definitions')
+def information_definitions():
+    return render_template(
+        'definitions.html',
+        title='Definitions',
+        year=datetime.now().year
+    )
+
 @app.route('/requests_test')
 def requests_test():
     year = request.args.get('year')
