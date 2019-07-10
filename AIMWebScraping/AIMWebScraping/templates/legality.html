@@ -1,0 +1,33 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h3>{{ message }}</h3>
+
+<blockquote>
+	Webscraping has become a bit of a legal grey area. Rulings have gone both ways on if web scraping is legal.
+</blockquote>
+
+<div class="panel-group" id="accordion">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title">
+				<a data-toggle="collapse" data-parent="#accordion" href="#collapse_ebay1">
+					eBay vs Bidder's Edge
+				</a>
+			</h2>
+		</div>
+		<div id="collapse_ebay1" class="panel-collapse collapse">
+			<br />
+			<blockquote>
+				<p>In 2000 eBay filed an injunction against another website for violating the <abbr title="A trespass to chattels is an intentional interference with another person's lawful possession of a personal property.">Trespass to Chattels law</abbr></p>
+			</blockquote>
+			<blockquote>
+				The court granded the injunction because users had to opt in and agree to the terms of service as well as the large number of bots employed by Bidder's Edge could be disruptive to eBay's systems. This was eventually settled out of court but set legal precedent on the issue.
+			</blockquote>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

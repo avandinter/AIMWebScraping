@@ -31,6 +31,14 @@ def information_definitions():
         year=datetime.now().year
     )
 
+@app.route('/information/legality')
+def information_legality():
+    return render_template(
+        'legality.html',
+        title='Legality',
+        year=datetime.now().year
+    )
+
 @app.route('/requests_test')
 def requests_test():
     year = request.args.get('year')
