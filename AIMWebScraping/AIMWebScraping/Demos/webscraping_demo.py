@@ -18,11 +18,7 @@ class webscraping_demo(object):
 
     def requests_brickset(self):
         response = self.__get_brickset()
-
-        result = "URL : " + self.year_url
-        result += "Status Code : " + str(response.status_code)
-        result += "HTML : " + response.text
-        return result
+        return response
 
     def bs4_brickset(self):
         response = self.__get_brickset()

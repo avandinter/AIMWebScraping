@@ -1,0 +1,118 @@
+{% extends "layout.html" %}
+
+{% block content %}
+
+<h2>{{ title }}</h2>
+<h3>{{ message }}</h3>
+
+<blockquote>
+	<p>Robots.txt, or robots exclusion protocol, is a file provided by most websites that communicate to web crawlers/scraper what the site's bot policy is</p>
+</blockquote>
+<ul>
+	<li><a href="https://stackoverflow.com/robots.txt">StackOverflow</a></li>
+	<li><a href="https://www.google.com/robots.txt">Google</a></li>
+	<li><a href="https://www.imdb.com/robots.txt">IMDB</a></li>
+	<li><a href="https://www.bricklink.com/robots.txt">Brick Link</a></li>
+	<li><a href="https://brickset.com/robots.txt">Brick Set</a></li>
+</ul>
+<div class="panel-group" id="definition_accordion">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title">
+				<a data-toggle="collapse" data-parent="#definition_accordion" href="#collapse_crawler">
+					Common features
+				</a>
+			</h2>
+		</div>
+		<div id="collapse_crawler" class="panel-collapse collapse in">
+			<div class="panel-group" id="crawler_accordion" style="padding: 10px;">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_user_agent">
+								User-agent
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_user_agent" class="panel-collapse collapse">
+						<blockquote>
+							<p>Indicates the agents the following rules apply to. User-agent: * will typically be the rules that apply to your bot</p>
+						</blockquote>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_allow">
+								Allow
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_allow" class="panel-collapse collapse">
+						<blockquote>
+							<p>The allow specifies which areas of the site are approved for bots. This is a non-standard protocol, most bots will use whichever is more specific based on url length between allow and disallow when there are conflicts</p>
+						</blockquote>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_disallow">
+								Disallow
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_disallow" class="panel-collapse collapse">
+						<blockquote>
+							<p>The disallow specifies which areas of the site your bots are not allowed to go</p>
+						</blockquote>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_crawl_delay">
+								Crawl-delay
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_crawl_delay" class="panel-collapse collapse">
+						<blockquote>
+							<p>This is a non-standard robots directive so it is up to interpretation, but this is used to communicate to the bot how the site expects bots to be throttled. The widely accepted interpretation is this protocol is the number of seconds between requests</p>
+						</blockquote>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_sitemap">
+								Sitemap
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_sitemap" class="panel-collapse collapse">
+						<blockquote>
+							<p>Another non-standard protocol. This communicates to a given bot where to find the websites XML sitemap.</p>
+						</blockquote>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_host">
+								Host
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_host" class="panel-collapse collapse">
+						<blockquote>
+							<p>This protocol is used when a given site has multiple mirrors to indicate the preferred domain for the bot to use</p>
+						</blockquote>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

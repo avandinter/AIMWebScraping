@@ -1,0 +1,52 @@
+{% extends "layout.html" %}
+{% block head %}
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+<script type=text/javascript>
+	$(function () {
+		$('a#scrapy').click(function () {
+			$.ajax({
+				url: '/scrapy_test',
+				data: { year: $('#year').val() },
+				success: function (data) {
+					console.log('get info');
+					$('#results2').html(JSON.stringify(data, null, '   '));
+				}
+			});
+		});
+	})
+</script>
+
+<script type=text/javascript>
+	$(function () {
+		$('a#full').click(function () {
+			$.ajax({
+				url: '/full_brickset',
+				success: function (data) {
+					console.log('get info');
+					$('#results2').html(JSON.stringify(data, null, '   '));
+				}
+			});
+		});
+	})
+</script>
+{% endblock %}
+{% block content %}
+
+<h2>{{ title }}.</h2>
+<h3></h3>
+
+<div class='container'>
+	<h3>Test</h3>
+	<fieldset>
+		<label>Year</label>
+		<input id="year" required value="{{ search }}" />
+	</fieldset>
+	<a href=# id=scrapy><button class='btn btn-default'>Crawl and Scrape with Scrapy</button></a>
+	<a href=# id=full><button class='btn btn-default'>Full Brickset</button></a>
+	<span id=result></span>
+
+	<p id="results2"></p>
+</div>
+
+{% endblock %}

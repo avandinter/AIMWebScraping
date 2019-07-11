@@ -9,7 +9,7 @@ import AIMWebScraping.lego_price_scraper.settings as settings
 class LegoPriceScraper(object):
     def begin_scraping(self):
         process = CrawlerProcess({
-        'USER_AGENT': settings.USER_AGENT,
+        #'USER_AGENT': settings.USER_AGENT,
         'LOG_LEVEL': settings.LOG_LEVEL,
         'CONCURRENT_REQUESTS' : settings.CONCURRENT_REQUESTS,
         'DOWNLOAD_DELAY' : settings.DOWNLOAD_DELAY,

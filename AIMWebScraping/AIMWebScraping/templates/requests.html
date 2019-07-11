@@ -10,91 +10,98 @@
 				data: { year: $('#year').val() },
 				success: function (data) {
 					console.log('get info');
-					$('#results2').text(JSON.stringify(data, null, '   '));
+					$('#result_code').val(JSON.parse(data).response);
+					//$('#results2').text(JSON.stringify(data['response'], null, '   '));
 				}
 			});
 		});
 	})
 </script>
 
-<script type=text/javascript>
-	$(function () {
-		$('a#soup').click(function () {
-			$.ajax({
-				url: '/soup_test',
-				data: { year: $('#year').val() },
-				success: function (data) {
-					console.log('get info');
-					$('#results2').html(JSON.stringify(data, null, '   '));
-				}
-			});
-		});
-	})
-</script>
-
-<script type=text/javascript>
-	$(function () {
-		$('a#allbs').click(function () {
-			$.ajax({
-				url: '/scan_all_test',
-				data: { year: $('#year').val() },
-				success: function (data) {
-					console.log('get info');
-					$('#results2').html(JSON.stringify(data, null, '   '));
-				}
-			});
-		});
-	})
-</script>
-
-<script type=text/javascript>
-	$(function () {
-		$('a#scrapy').click(function () {
-			$.ajax({
-				url: '/scrapy_test',
-				data: { year: $('#year').val() },
-				success: function (data) {
-					console.log('get info');
-					$('#results2').html(JSON.stringify(data, null, '   '));
-				}
-			});
-		});
-	})
-</script>
-
-<script type=text/javascript>
-	$(function () {
-		$('a#full').click(function () {
-			$.ajax({
-				url: '/full_brickset',
-				success: function (data) {
-					console.log('get info');
-					$('#results2').html(JSON.stringify(data, null, '   '));
-				}
-			});
-		});
-	})
-</script>
 {% endblock %}
 {% block content %}
 
-<h2>{{ title }}.</h2>
-<h3></h3>
+<h2>{{ title }}</h2>
+<blockquote>
+	Requests is a python HTTP library built upon urllib3 and httplib that makes requests and responses easier to use an more human friendly.
+</blockquote>
+
+<div class="panel-group" id="definition_accordion">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title">
+				<a data-toggle="collapse" data-parent="#definition_accordion" href="#collapse_crawler">
+					Requests for web scraping and crawling
+				</a>
+			</h2>
+		</div>
+		<div id="collapse_crawler" class="panel-collapse collapse in">
+			<div class="panel-group" id="crawler_accordion" style="padding: 10px;">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_features">
+								Features
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_features" class="panel-collapse collapse">
+						<ul>
+							<li>Support for International Domains and URLs</li>
+							<li>Keep-alive & Connection Pooling</li>
+							<li>Sessions with Cookie Persistence</li>
+							<li>SSL Verification</li>
+							<li>Basic Authentication</li>
+							<li>Automatic Decompression</li>
+							<li>Unicode Response Bodies</li>
+							<li>Multipart File Uploads</li>
+							<li>Streaming Downloads</li>
+							<li>Connection Timeouts</li>
+							<li>HTTP(S) Proxy Support</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
 
 <div class='container'>
-	<h3>Test</h3>
+	<h3>Demo</h3>
 	<fieldset>
 		<label>Year</label>
 		<input id="year" required value="{{ search }}" />
 	</fieldset>
 	<a href=# id=requests><button class='btn btn-default'>Requests</button></a>
-	<a href=# id=soup><button class='btn btn-default'>Beautiful Soup</button></a>
-	<a href=# id=allbs><button class='btn btn-default'>Crawl and Scrape with Requests and BS</button></a>
-	<a href=# id=scrapy><button class='btn btn-default'>Crawl and Scrape with Scrapy</button></a>
-	<a href=# id=full><button class='btn btn-default'>Full Brickset</button></a>
 	<span id=result></span>
+	<br/>
+	<label>Result Code</label><input id="result_code" />
 
 	<p id="results2"></p>
 </div>
+
+<script type="text/javascript">
+	window.onload = function () {
+		var codeElement = document.getElementById('get_code');
+		var code = codeElement.innerText;
+
+		codeElement.innerHTML = "";
+
+		var codeMirror = CodeMirror(
+			codeElement,
+			{
+				value: code,
+				mode: "python",
+				theme: "default",
+				lineNumbers: false,
+				readOnly: true
+			}
+		);
+	};
+</script>
 
 {% endblock %}

@@ -72,6 +72,9 @@
     <Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\AIMWebScraping\Demos\" />-->
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AIMWebScraping\templates\scrapy.html" />
+    <Content Include="AIMWebScraping\templates\beautifulsoup.html" />
+    <Content Include="AIMWebScraping\templates\robots.html" />
     <Content Include="AIMWebScraping\templates\legality.html" />
     <Content Include="AIMWebScraping\templates\definitions.html" />
     <Content Include="requirements.txt" />

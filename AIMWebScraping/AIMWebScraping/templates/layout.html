@@ -11,17 +11,17 @@
 </head>
 
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
-        <div class="container">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a href="/" class="navbar-brand">AIM Webscraping</a>
-            </div>
-            <div class="navbar-collapse collapse">
+	<div class="navbar navbar-inverse navbar-fixed-top">
+		<div class="container">
+			<div class="navbar-header">
+				<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+					<span class="icon-bar"></span>
+				</button>
+				<a href="/" class="navbar-brand">AIM Webscraping</a>
+			</div>
+			<div class="navbar-collapse collapse">
 				<ul class="nav navbar-nav">
 					<li><a href="{{ url_for('home') }}">Home</a></li>
 					<li class="dropdown">
@@ -32,27 +32,39 @@
 						<ul class="dropdown-menu">
 							<li><a href="{{ url_for('information_definitions') }}">Definitions</a></li>
 							<li><a href="{{ url_for('information_legality') }}">Legality</a></li>
-							<li><a href="#">Page 1-3</a></li>
+							<li><a href="{{ url_for('information_robots') }}">Robots.txt</a></li>
 						</ul>
 					</li>
-					<li><a href="{{ url_for('requests_demo') }}">Requests</a></li>
+					<li class="dropdown">
+						<a class="dropdown-toggle" data-toggle="dropdown" href="#">
+							Libraries
+							<span class="caret"></span>
+						</a>
+						<ul class="dropdown-menu">
+							<li><a href="{{ url_for('libraries_requests') }}">Requests</a></li>
+							<li><a href="{{ url_for('libraries_soup') }}">Beautiful Soup</a></li>
+							<li><a href="{{ url_for('libraries_scrapy') }}">Scrapy</a></li>
+						</ul>
+					</li>
 				</ul>
-            </div>
-        </div>
-    </div>
+			</div>
+		</div>
+	</div>
 
-    <div class="container body-content">
-        {% block content %}{% endblock %}
-        <hr />
-        <footer>
-            <p>&copy; {{ year }}</p>
-        </footer>
-    </div>
-
-    <script src="/static/scripts/jquery-1.10.2.js"></script>
-    <script src="/static/scripts/bootstrap.js"></script>
-    <script src="/static/scripts/respond.js"></script>
-    {% block scripts %}{% endblock %}
+	<div class="container body-content">
+		{% block content %}{% endblock %}
+		<hr />
+		<footer>
+			<p>&copy; {{ year }}</p>
+		</footer>
+	</div>
+	<link rel="stylesheet" href="http://codemirror.net/lib/codemirror.css">
+	<script src="http://codemirror.net/lib/codemirror.js"></script>
+	<script src="http://codemirror.net/mode/python/python.js"></script>
+	<script src="/static/scripts/jquery-1.10.2.js"></script>
+	<script src="/static/scripts/bootstrap.js"></script>
+	<script src="/static/scripts/respond.js"></script>
+	{% block scripts %}{% endblock %}
 
 </body>
 </html>

@@ -1,5 +1,6 @@
 from datetime import datetime
 from flask import render_template, request, jsonify
+import json
 from AIMWebScraping import app
 from AIMWebScraping.Demos import webscraping_demo as demo
 from AIMWebScraping.lego_price_scraper import init
@@ -13,11 +14,31 @@ def home():
         year=datetime.now().year,
     )
 
-@app.route('/requests_demo')
-def requests_demo():
+@app.route('/libraries/requests')
+def libraries_requests():
     return render_template(
         'requests.html',
-        title='Demo',
+        title='Requests',
+        year=datetime.now().year,
+        search ="2018",
+        message = ""
+    )
+
+@app.route('/libraries/soup')
+def libraries_soup():
+    return render_template(
+        'beautifulsoup.html',
+        title='Beautiful Soup',
+        year=datetime.now().year,
+        search ="2018",
+        message = ""
+    )
+
+@app.route('/libraries/scrapy')
+def libraries_scrapy():
+    return render_template(
+        'scrapy.html',
+        title='Scrapy',
         year=datetime.now().year,
         search ="2018",
         message = ""
@@ -39,12 +60,20 @@ def information_legality():
         year=datetime.now().year
     )
 
+@app.route('/information/robots')
+def information_robots():
+    return render_template(
+        'robots.html',
+        title='Robots.txt',
+        year=datetime.now().year
+    )
+
 @app.route('/requests_test')
 def requests_test():
     year = request.args.get('year')
     scraper = demo.webscraping_demo(year)
-
-    return jsonify(scraper.requests_brickset())
+    response = scraper.requests_brickset()
+    return json.dumps({'response': response.status_code, 'html': response.text})
 
 @app.route('/soup_test')
 def soup_test():
