@@ -51,6 +51,7 @@
     <Compile Include="AIMWebScraping\lego_price_scraper\spider.py">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Include="AIMWebScraping\library_demos\requests_demo.py" />
     <Compile Include="runserver.py" />
     <Compile Include="AIMWebScraping\__init__.py" />
     <Compile Include="AIMWebScraping\views.py" />
@@ -63,9 +64,11 @@
     <Folder Include="AIMWebScraping\lego_price_scraper\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\logs\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\pipelines\" />
+    <Folder Include="AIMWebScraping\library_demos\" />
     <Folder Include="AIMWebScraping\static\" />
     <Folder Include="AIMWebScraping\static\content\" />
     <Folder Include="AIMWebScraping\static\fonts\" />
+    <Folder Include="AIMWebScraping\static\images\" />
     <Folder Include="AIMWebScraping\static\scripts\" />
     <Folder Include="AIMWebScraping\templates\" />
     <!--<Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\IMDb\" />

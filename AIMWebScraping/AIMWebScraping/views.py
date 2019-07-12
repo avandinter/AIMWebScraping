@@ -4,6 +4,7 @@ import json
 from AIMWebScraping import app
 from AIMWebScraping.Demos import webscraping_demo as demo
 from AIMWebScraping.lego_price_scraper import init
+from AIMWebScraping.library_demos import requests_demo
 
 @app.route('/')
 @app.route('/home')
@@ -68,12 +69,29 @@ def information_robots():
         year=datetime.now().year
     )
 
-@app.route('/requests_test')
-def requests_test():
-    year = request.args.get('year')
-    scraper = demo.webscraping_demo(year)
-    response = scraper.requests_brickset()
-    return json.dumps({'response': response.status_code, 'html': response.text})
+#@app.route('/requests_test')
+#def requests_test():
+#    year = request.args.get('year')
+#    scraper = demo.webscraping_demo(year)
+#    response = scraper.requests_brickset()
+#    return json.dumps({'response': response.status_code, 'html': response.text})
+
+@app.route('/requests_get_demo')
+def requests_get_demo():
+    response = requests_demo.get_table_page()
+    return json.dumps({'response': response.status_code, 'html': response.text, 'headers': str(response.headers)})
+
+@app.route('/requests_post_demo')
+def requests_post_demo():
+    args = request.args
+    response, session = requests_demo.post_login(args.get('username'), args.get('password'))
+    return json.dumps({'response': response.status_code, 'html': response.text, 'cookies': json.dumps(session.cookies.get_dict()), 'headers': str(response.headers)})
+
+@app.route('/requests_download_image_demo')
+def requests_download_image_demo():
+    image_url = request.args.get('url')
+    filepath = requests_demo.download_image(image_url)
+    return json.dumps({'filepath': filepath })
 
 @app.route('/soup_test')
 def soup_test():

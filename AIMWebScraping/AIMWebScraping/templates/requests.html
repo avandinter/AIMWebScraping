@@ -6,12 +6,111 @@
 	$(function () {
 		$('a#requests').click(function () {
 			$.ajax({
-				url: '/requests_test',
-				data: { year: $('#year').val() },
+				url: '/requests_get_demo',
 				success: function (data) {
-					console.log('get info');
-					$('#result_code').val(JSON.parse(data).response);
-					//$('#results2').text(JSON.stringify(data['response'], null, '   '));
+					info = JSON.parse(data)
+					$('#result_code').text(info.response);
+
+					var jsonElement = document.getElementById('get_json');
+					jsonElement.innerHTML = "";
+					CodeMirror(
+						jsonElement,
+						{
+							value: info.headers,
+							matchBrackets: true,
+							autoCloseBrackets: true,
+							mode: "application/ld+json",
+							smartIndent: true,
+							lineWrapping: true,
+							readOnly: true
+						}
+					);
+
+					var codeElement = document.getElementById('get_code');
+					codeElement.innerHTML = "";
+					CodeMirror(
+						codeElement,
+						{
+							value: info.html,
+							mode: "xml",
+							htmlMode: true,
+							lineNumbers: true,
+							readOnly: true
+						}
+					);
+				}
+			});
+		});
+	})
+</script>
+
+<script type=text/javascript>
+	$(function () {
+		$('a#requests_post').click(function () {
+			$.ajax({
+				url: '/requests_post_demo',
+				data: { username: $('#username').val(), password: $('#password').val() },
+				success: function (data) {
+					info = JSON.parse(data)
+					$('#post_result').text(info.response);
+
+					var jsonElement = document.getElementById('post_json_header');
+					jsonElement.innerHTML = "";
+					CodeMirror(
+						jsonElement,
+						{
+							value: info.headers,
+							matchBrackets: true,
+							autoCloseBrackets: true,
+							mode: "application/ld+json",
+							smartIndent: true,
+							lineWrapping: true,
+							readOnly: true
+						}
+					);
+
+					var jsonElement = document.getElementById('post_json_cookie');
+					jsonElement.innerHTML = "";
+					CodeMirror(
+						jsonElement,
+						{
+							value: info.cookies,
+							matchBrackets: true,
+							autoCloseBrackets: true,
+							mode: "application/ld+json",
+							smartIndent: true,
+							lineWrapping: true,
+							readOnly: true
+						}
+					);
+
+					var codeElement = document.getElementById('post_code');
+					codeElement.innerHTML = "";
+					CodeMirror(
+						codeElement,
+						{
+							value: info.html,
+							mode: "xml",
+							htmlMode: true,
+							lineNumbers: true,
+							readOnly: true
+						}
+					);
+				}
+			});
+		});
+	})
+</script>
+
+<script type=text/javascript>
+	$(function () {
+		$('a#requests_image').click(function () {
+			$.ajax({
+				url: '/requests_download_image_demo',
+				data: { url: $('#image_url').val() },
+				success: function (data) {
+					info = JSON.parse(data)
+					$('#image_placeholder').prepend('<img id="scrapedImage" src="/static/images/' + info.filepath + '" />')
 				}
 			});
 		});
@@ -45,7 +144,7 @@
 							</a>
 						</h4>
 					</div>
-					<div id="collapse_features" class="panel-collapse collapse">
+					<div id="collapse_features" class="panel-collapse collapse in">
 						<ul>
 							<li>Support for International Domains and URLs</li>
 							<li>Keep-alive & Connection Pooling</li>
@@ -61,47 +160,70 @@
 						</ul>
 					</div>
 				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_get">
+								Get Demo
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_get" class="panel-collapse collapse">
+						<h2><a href="http://testing-ground.scraping.pro/table">Link</a></h2>
+						<a href=# id=requests><button class='btn btn-default'>Get Page</button></a>
+						<br />
+						<h3>Result Code : <span id="result_code"></span></h3>
+						<h3>Headers : </h3>
+						<pre><code id="get_json"></code></pre>
+						<h3>HTML : </h3>
+						<pre><code id="get_code"></code></pre>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_post">
+								Post Demo
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_post" class="panel-collapse collapse">
+						<h2><a href="http://testing-ground.scraping.pro/table">Link</a></h2>
+						<label>Username: </label><input id="username" value="admin" />
+						<br />
+						<label>Password: </label><input id="password" value="12345" />
+						<a href=# id=requests_post><button class='btn btn-default'>Log In</button></a>
+						<br />
+						<h3>Result Code : <span id="post_result"></span></h3>
+						<h3>Headers : </h3>
+						<pre><code id="post_json_header"></code></pre>
+						<h3>Cookies : </h3>
+						<pre><code id="post_json_cookie"></code></pre>
+						<h3>HTML : </h3>
+						<pre><code id="post_code"></code></pre>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_download">
+								Download Image
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_download" class="panel-collapse collapse">
+						<h2><a href="http://testing-ground.scraping.pro/table">Link</a></h2>
+						<label>Image URL: </label><input id="image_url" value="http://testing-ground.scraping.pro//img/logo.png" />
+						<a href=# id=requests_image><button class='btn btn-default'>Download Image</button></a>
+						<div id="image_placeholder" style="min-height: 400px; min-width:400px;"></div>
+					</div>
+				</div>
 			</div>
 		</div>
 	</div>
 </div>
 
 
-
-
-
-<div class='container'>
-	<h3>Demo</h3>
-	<fieldset>
-		<label>Year</label>
-		<input id="year" required value="{{ search }}" />
-	</fieldset>
-	<a href=# id=requests><button class='btn btn-default'>Requests</button></a>
-	<span id=result></span>
-	<br/>
-	<label>Result Code</label><input id="result_code" />
-
-	<p id="results2"></p>
-</div>
-
-<script type="text/javascript">
-	window.onload = function () {
-		var codeElement = document.getElementById('get_code');
-		var code = codeElement.innerText;
-
-		codeElement.innerHTML = "";
-
-		var codeMirror = CodeMirror(
-			codeElement,
-			{
-				value: code,
-				mode: "python",
-				theme: "default",
-				lineNumbers: false,
-				readOnly: true
-			}
-		);
-	};
-</script>
 
 {% endblock %}
