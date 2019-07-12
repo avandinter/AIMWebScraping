@@ -4,7 +4,7 @@ import json
 from AIMWebScraping import app
 from AIMWebScraping.Demos import webscraping_demo as demo
 from AIMWebScraping.lego_price_scraper import init
-from AIMWebScraping.library_demos import requests_demo
+from AIMWebScraping.library_demos import requests_demo, beautifulsoup_demo
 
 @app.route('/')
 @app.route('/home')
@@ -76,6 +76,7 @@ def information_robots():
 #    response = scraper.requests_brickset()
 #    return json.dumps({'response': response.status_code, 'html': response.text})
 
+################## Requests ######################
 @app.route('/requests_get_demo')
 def requests_get_demo():
     response = requests_demo.get_table_page()
@@ -92,6 +93,28 @@ def requests_download_image_demo():
     image_url = request.args.get('url')
     filepath = requests_demo.download_image(image_url)
     return json.dumps({'filepath': filepath })
+
+
+################ BeautifulSoup ####################
+@app.route('/beautifulsoup_navigation_demo')
+def beautifulsoup_navigation_demo():
+    args = request.args
+    return json.dumps({"text": beautifulsoup_demo.navigate(args.get("direction"))})
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 @app.route('/soup_test')
 def soup_test():
