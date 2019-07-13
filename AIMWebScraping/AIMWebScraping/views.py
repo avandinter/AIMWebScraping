@@ -99,7 +99,16 @@ def requests_download_image_demo():
 @app.route('/beautifulsoup_navigation_demo')
 def beautifulsoup_navigation_demo():
     args = request.args
-    return json.dumps({"text": beautifulsoup_demo.navigate(args.get("direction"))})
+    return json.dumps({"html": beautifulsoup_demo.navigate(args.get("direction"))})
+
+@app.route('/beautifulsoup_strainer_dollar_demo')
+def beautifulsoup_strainer_dollar_demo():
+    message = beautifulsoup_demo.soup_strainer()
+    print(message)
+    return json.dumps({"html": message})
+
+
+
 
 
 

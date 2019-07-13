@@ -2,42 +2,61 @@
 {% block head %}
 
 <script type=text/javascript>
+	function send_direction(direction) {
+		return $.ajax({
+			url: '/beautifulsoup_navigation_demo',
+			data: { direction: direction },
+			success: function (data) {
+				info = JSON.parse(data)
+
+				var codeElement = document.getElementById('element_html');
+				codeElement.innerHTML = "";
+				CodeMirror(
+					codeElement,
+					{
+						value: info.html,
+						mode: "xml",
+						htmlMode: true,
+						lineNumbers: true,
+						readOnly: true
+					}
+				);
+			}
+		});
+	}
+
 	$(function () {
 		$('a#nav_up').click(function () {
-			$.ajax({
-				url: '/beautifulsoup_navigation_demo',
-				data: { direction: "up" },
-				success: function (data) {
-					info = JSON.parse(data)
-
-					var codeElement = document.getElementById('element_html');
-					codeElement.innerHTML = "";
-					CodeMirror(
-						codeElement,
-						{
-							value: info.html,
-							mode: "xml",
-							htmlMode: true,
-							lineNumbers: true,
-							readOnly: true
-						}
-					);
-				}
-			});
+			send_direction("up")
 		});
 	})
-</script>
 
-<script type=text/javascript>
 	$(function () {
 		$('a#nav_none').click(function () {
+			send_direction("none")
+		});
+	})
+
+	$(function () {
+		$('a#nav_forward').click(function () {
+			send_direction("forward")
+		});
+	})
+
+	$(function () {
+		$('a#nav_back').click(function () {
+			send_direction("back")
+		});
+	})
+
+	$(function () {
+		$('a#strainer_dollar').click(function () {
 			$.ajax({
-				url: '/beautifulsoup_navigation_demo',
-				data: { direction: "none" },
+				url: '/beautifulsoup_strainer_dollar_demo',
 				success: function (data) {
 					info = JSON.parse(data)
 
-					var codeElement = document.getElementById('element_html');
+					var codeElement = document.getElementById('strainer_out');
 					codeElement.innerHTML = "";
 					CodeMirror(
 						codeElement,
@@ -104,9 +123,27 @@
 						<h2><a href="http://testing-ground.scraping.pro/table">Link</a></h2>
 						<a href=# id="nav_none"><button class='btn btn-default'>Get Default Element</button></a>
 						<a href=# id="nav_up"><button class='btn btn-default'>Get First Parent</button></a>
+						<a href=# id="nav_forward"><button class='btn btn-default'>Get Next Sibling</button></a>
+						<a href=# id="nav_back"><button class='btn btn-default'>Get Previous Sibling</button></a>
 						<br />
 						<h3>Element : </h3>
 						<pre><code id="element_html"></code></pre>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_strainer">
+								Soup Strainer
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_strainer" class="panel-collapse collapse">
+						<h2><a href="http://testing-ground.scraping.pro/table">Link</a></h2>
+						<a href=# id="strainer_dollar"><button class='btn btn-default'>Get td elements</button></a>
+						<br />
+						<h3>Tags : </h3>
+						<pre><code id="strainer_out"></code></pre>
 					</div>
 				</div>
 			</div>
