@@ -53,6 +53,9 @@
     </Compile>
     <Compile Include="AIMWebScraping\library_demos\beautifulsoup_demo.py" />
     <Compile Include="AIMWebScraping\library_demos\requests_demo.py" />
+    <Compile Include="AIMWebScraping\library_demos\scrapy_demo.py">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Include="runserver.py" />
     <Compile Include="AIMWebScraping\__init__.py" />
     <Compile Include="AIMWebScraping\views.py" />

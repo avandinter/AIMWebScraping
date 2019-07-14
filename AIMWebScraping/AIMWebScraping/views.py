@@ -5,6 +5,7 @@ from AIMWebScraping import app
 from AIMWebScraping.Demos import webscraping_demo as demo
 from AIMWebScraping.lego_price_scraper import init
 from AIMWebScraping.library_demos import requests_demo, beautifulsoup_demo
+from AIMWebScraping.library_demos.scrapy_demo import ScrapyDemo
 
 @app.route('/')
 @app.route('/home')
@@ -39,13 +40,6 @@ def information_robots():
         title='Robots.txt',
         year=datetime.now().year
     )
-
-#@app.route('/requests_test')
-#def requests_test():
-#    year = request.args.get('year')
-#    scraper = demo.webscraping_demo(year)
-#    response = scraper.requests_brickset()
-#    return json.dumps({'response': response.status_code, 'html': response.text})
 
 ################## Requests ######################
 @app.route('/libraries/requests')
@@ -115,10 +109,16 @@ def libraries_scrapy():
         message = ""
     )
 
+@app.route('/full_brickset')
+def full_brickset():
+    init.LegoPriceScraper().begin_scraping()
+    return jsonify("done")
 
 
-
-
+@app.route('/scrapy_demo')
+def scrapy_demo():
+    ScrapyDemo().begin_scraping()
+    return jsonify("done")
 
 
 
@@ -149,13 +149,6 @@ def scrapy_test():
     year = request.args.get('year')
     scrapy = demo.ScrapyExample()
     scrapy.begin_scraping(year)
-    return jsonify("done")
-
-@app.route('/full_brickset')
-def full_brickset():
-    init.LegoPriceScraper().begin_scraping()
-    #scrapy = brickset.brickset_full()
-    #scrapy.begin_scraping()
     return jsonify("done")
 
 @app.route('/about')

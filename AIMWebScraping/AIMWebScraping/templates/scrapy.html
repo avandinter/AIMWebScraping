@@ -30,11 +30,118 @@
 		});
 	})
 </script>
+
+<script type=text/javascript>
+	$(function () {
+		$('a#demo').click(function () {
+			$.ajax({
+				url: '/scrapy_demo',
+				success: function (data) {
+					console.log('get info');
+					$('#results2').html(JSON.stringify(data, null, '   '));
+				}
+			});
+		});
+	})
+</script>
 {% endblock %}
 {% block content %}
 
 <h2>{{ title }}.</h2>
-<h3></h3>
+
+<blockquote>
+	Scrapy is a web crawling/scraping framework that employs "spiders", or self contained web crawlers, to carry out instructions
+</blockquote>
+
+<div class="panel-group" id="definition_accordion">
+	<div class="panel panel-default">
+		<div class="panel-heading">
+			<h2 class="panel-title">
+				<a data-toggle="collapse" data-parent="#definition_accordion" href="#collapse_crawler">
+					Scrapy Framework
+				</a>
+			</h2>
+		</div>
+		<div id="collapse_crawler" class="panel-collapse collapse in">
+			<div class="panel-group" id="crawler_accordion" style="padding: 10px;">
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_features">
+								Features
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_features" class="panel-collapse collapse in">
+						<ul>
+							<li>Asynchronous Requests and Processing</li>
+							<li>Built in tools for parsing, selecting, and extracting information</li>
+							<li>XPath and CSS Selector Support</li>
+							<li>Interactive Shell Console</li>
+							<li>JSON, CSV and XML Data Feed Exports</li>
+							<li>Pipeline Archetecture</li>
+							<li>Automatically corrects foreign, non-standard and broken encoding</li>
+							<li>Cookie and Session Handling</li>
+						</ul>
+					</div>
+				</div>
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_demo">
+								Full Demo
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_demo" class="panel-collapse collapse">
+						<a href=# id=demo><button class='btn btn-default'>Test</button></a>
+					</div>
+				</div>
+
+
+
+
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_full">
+								Full Demo
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_full" class="panel-collapse collapse">
+						<a href=# id=full><button class='btn btn-default'>Full Brickset</button></a>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 <div class='container'>
 	<h3>Test</h3>
