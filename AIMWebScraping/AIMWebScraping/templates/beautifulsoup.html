@@ -49,25 +49,50 @@
 		});
 	})
 
+	function filter(filter_tag) {
+		return $.ajax({
+			url: '/beautifulsoup_strainer_demo',
+			data: { tag: filter_tag },
+			success: function (data) {
+				info = JSON.parse(data)
+				var codeElement = document.getElementById('strainer_out');
+				codeElement.innerHTML = "";
+				CodeMirror(
+					codeElement,
+					{
+						value: info.html,
+						mode: "xml",
+						htmlMode: true,
+						lineNumbers: true,
+						readOnly: true
+					}
+				);
+			}
+		});
+	}
+
 	$(function () {
-		$('a#strainer_dollar').click(function () {
+		$('a#strainer_td').click(function () {
+			filter("td");
+		});
+	})
+
+	$(function () {
+		$('a#strainer_a').click(function () {
+			filter("a");
+		});
+	})
+
+	$(function(){
+		$('a#search').click(function () {
 			$.ajax({
-				url: '/beautifulsoup_strainer_dollar_demo',
+				url: '/beautifulsoup_google_demo',
+				data: {
+					search: $("#search_term").val()
+				},
 				success: function (data) {
 					info = JSON.parse(data)
-
-					var codeElement = document.getElementById('strainer_out');
-					codeElement.innerHTML = "";
-					CodeMirror(
-						codeElement,
-						{
-							value: info.html,
-							mode: "xml",
-							htmlMode: true,
-							lineNumbers: true,
-							readOnly: true
-						}
-					);
+					$("#google_results").append(info.links)
 				}
 			});
 		});
@@ -140,10 +165,27 @@
 					</div>
 					<div id="collapse_strainer" class="panel-collapse collapse">
 						<h2><a href="http://testing-ground.scraping.pro/table">Link</a></h2>
-						<a href=# id="strainer_dollar"><button class='btn btn-default'>Get td elements</button></a>
+						<a href=# id="strainer_td"><button class='btn btn-default'>Get td elements</button></a>
+						<a href=# id="strainer_a"><button class='btn btn-default'>Get all links</button></a>
 						<br />
 						<h3>Tags : </h3>
 						<pre><code id="strainer_out"></code></pre>
+					</div>
+				</div>
+				<div class="panel panel-default">
+					<div class="panel-heading">
+						<h4 class="panel-title">
+							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_google">
+								Google Search
+							</a>
+						</h4>
+					</div>
+					<div id="collapse_google" class="panel-collapse collapse">
+						<label>Search </label><input id="search_term" value="python" />
+						<a href=# id="search"><button class='btn btn-default'>Search</button></a>
+						<br />
+						<h3>Top results : </h3>
+						<ul id="google_results"></ul>
 					</div>
 				</div>
 			</div>

@@ -15,36 +15,7 @@ def home():
         year=datetime.now().year,
     )
 
-@app.route('/libraries/requests')
-def libraries_requests():
-    return render_template(
-        'requests.html',
-        title='Requests',
-        year=datetime.now().year,
-        search ="2018",
-        message = ""
-    )
-
-@app.route('/libraries/soup')
-def libraries_soup():
-    return render_template(
-        'beautifulsoup.html',
-        title='Beautiful Soup',
-        year=datetime.now().year,
-        search ="2018",
-        message = ""
-    )
-
-@app.route('/libraries/scrapy')
-def libraries_scrapy():
-    return render_template(
-        'scrapy.html',
-        title='Scrapy',
-        year=datetime.now().year,
-        search ="2018",
-        message = ""
-    )
-
+################ Information ####################
 @app.route('/information/definitions')
 def information_definitions():
     return render_template(
@@ -77,6 +48,16 @@ def information_robots():
 #    return json.dumps({'response': response.status_code, 'html': response.text})
 
 ################## Requests ######################
+@app.route('/libraries/requests')
+def libraries_requests():
+    return render_template(
+        'requests.html',
+        title='Requests',
+        year=datetime.now().year,
+        search ="2018",
+        message = ""
+    )
+
 @app.route('/requests_get_demo')
 def requests_get_demo():
     response = requests_demo.get_table_page()
@@ -96,19 +77,43 @@ def requests_download_image_demo():
 
 
 ################ BeautifulSoup ####################
+@app.route('/libraries/soup')
+def libraries_soup():
+    return render_template(
+        'beautifulsoup.html',
+        title='Beautiful Soup',
+        year=datetime.now().year,
+        search ="2018",
+        message = ""
+    )
+
 @app.route('/beautifulsoup_navigation_demo')
 def beautifulsoup_navigation_demo():
     args = request.args
     return json.dumps({"html": beautifulsoup_demo.navigate(args.get("direction"))})
 
-@app.route('/beautifulsoup_strainer_dollar_demo')
-def beautifulsoup_strainer_dollar_demo():
-    message = beautifulsoup_demo.soup_strainer()
-    print(message)
+@app.route('/beautifulsoup_strainer_demo')
+def beautifulsoup_strainer_demo():
+    args = request.args
+
+    message = beautifulsoup_demo.soup_strainer(args.get("tag"))
     return json.dumps({"html": message})
 
+@app.route('/beautifulsoup_google_demo')
+def beautifulsoup_google_demo():
+    args = request.args
+    return json.dumps({"links": beautifulsoup_demo.google_search(args.get("search"))})
 
-
+################ Scrapy ####################
+@app.route('/libraries/scrapy')
+def libraries_scrapy():
+    return render_template(
+        'scrapy.html',
+        title='Scrapy',
+        year=datetime.now().year,
+        search ="2018",
+        message = ""
+    )
 
 
 
