@@ -29,6 +29,7 @@ class ExporterPipeline(object):
 
     def _exporter_for_item(self, item):
         table = item['table']
+        print(table)
         if table not in self.table_to_exporter:
             f = open('AIMWebScraping/data/{}.json'.format(table), 'wb')
             exporter = JsonLinesItemExporter(f)
@@ -81,6 +82,7 @@ class DemoSpider(scrapy.Spider):
                 if text is None:
                     text = cell.xpath('center/text()').extract_first()
 
+                print(text)
                 if (int(colspan) == len(product_lookup)):
                     current_year = text
                     break

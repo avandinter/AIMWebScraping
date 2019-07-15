@@ -60,11 +60,11 @@
   <ItemGroup>
     <Folder Include="AIMWebScraping\" />
     <Folder Include="AIMWebScraping\data\fullscrape\" />
-    <Folder Include="AIMWebScraping\data\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\logs\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\pipelines\" />
     <Folder Include="AIMWebScraping\library_demos\" />
+    <Folder Include="AIMWebScraping\data\" />
     <Folder Include="AIMWebScraping\static\" />
     <Folder Include="AIMWebScraping\static\content\" />
     <Folder Include="AIMWebScraping\static\fonts\" />
