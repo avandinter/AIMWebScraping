@@ -28,9 +28,6 @@
     <EnableUnmanagedDebugging>false</EnableUnmanagedDebugging>
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="AIMWebScraping\Demos\webscraping_demo.py">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Include="AIMWebScraping\lego_price_scraper\init.py">
       <SubType>Code</SubType>
     </Compile>
@@ -63,7 +60,6 @@
   <ItemGroup>
     <Folder Include="AIMWebScraping\" />
     <Folder Include="AIMWebScraping\data\fullscrape\" />
-    <Folder Include="AIMWebScraping\Demos\" />
     <Folder Include="AIMWebScraping\data\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\logs\" />

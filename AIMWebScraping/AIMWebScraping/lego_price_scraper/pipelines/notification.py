@@ -21,6 +21,7 @@ class NotificationPipeline(object):
 
 
     def create_teams_message(self, item):
+        print("Sending Notification for {}".format(item["name"]))
         return {
                 "@type": "MessageCard",
                 "@context": "http://schema.org/extensions",

@@ -2,7 +2,6 @@ from datetime import datetime
 from flask import render_template, request, jsonify
 import json
 from AIMWebScraping import app
-from AIMWebScraping.Demos import webscraping_demo as demo
 from AIMWebScraping.lego_price_scraper import init
 from AIMWebScraping.library_demos import requests_demo, beautifulsoup_demo
 from AIMWebScraping.library_demos.scrapy_demo import ScrapyDemo
@@ -119,43 +118,3 @@ def full_brickset():
 def scrapy_demo():
     ScrapyDemo().begin_scraping()
     return jsonify("done")
-
-
-
-
-
-
-
-
-
-
-
-@app.route('/soup_test')
-def soup_test():
-    year = request.args.get('year')
-    scraper = demo.webscraping_demo(year)
-
-    return jsonify(scraper.bs4_brickset())
-
-@app.route('/scan_all_test')
-def scan_all_test():
-    year = request.args.get('year')
-    scraper = demo.webscraping_demo(year)
-
-    return jsonify(scraper.all_pages_brickset())
-
-@app.route('/scrapy_test')
-def scrapy_test():
-    year = request.args.get('year')
-    scrapy = demo.ScrapyExample()
-    scrapy.begin_scraping(year)
-    return jsonify("done")
-
-@app.route('/about')
-def about():
-    return render_template(
-        'about.html',
-        title='About',
-        year=datetime.now().year,
-        message='Your application description page.'
-    )

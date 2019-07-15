@@ -50,7 +50,7 @@
 <h2>{{ title }}.</h2>
 
 <blockquote>
-	Scrapy is a web crawling/scraping framework that employs "spiders", or self contained web crawlers, to carry out instructions
+	Scrapy is a web crawling/scraping framework that employs "spiders", or self contained web crawlers, to carry out instructions. This framework is written using Twisted, a non-blocking event driven networking framework
 </blockquote>
 
 <div class="panel-group" id="definition_accordion">
@@ -90,27 +90,32 @@
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_demo">
-								Full Demo
+								Extract Table Data
 							</a>
 						</h4>
 					</div>
 					<div id="collapse_demo" class="panel-collapse collapse">
+						<h2><a target="_blank" href="http://testing-ground.scraping.pro/table">Link</a></h2>
 						<a href=# id=demo><button class='btn btn-default'>Test</button></a>
 					</div>
 				</div>
-
-
-
-
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						<h4 class="panel-title">
 							<a data-toggle="collapse" data-parent="#crawler_accordion" href="#collapse_full">
-								Full Demo
+								Full Demo - Lego Price Scraper
 							</a>
 						</h4>
 					</div>
 					<div id="collapse_full" class="panel-collapse collapse">
+						<ul>
+							<li>Extracts the Year links from <a href="https://brickset.com/browse/sets">Brickset</a></li>
+							<li>Crawls the sets for that year</li>
+							<li>Scrapes information about the set</li>
+							<li>Crawls and scrapes <a href="https://www.bricklink.com/v2/catalog/catalogitem.page?S=10260-1#T=P">bricklink</a> to extract pricing info</li>
+							<li>Compares average sale price to min price for sale</li>
+							<li>Sends notification via Office 365 Webhook to Team when price is 20% below average sale price</li>
+						</ul>
 						<a href=# id=full><button class='btn btn-default'>Full Brickset</button></a>
 					</div>
 				</div>
@@ -118,42 +123,4 @@
 		</div>
 	</div>
 </div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div class='container'>
-	<h3>Test</h3>
-	<fieldset>
-		<label>Year</label>
-		<input id="year" required value="{{ search }}" />
-	</fieldset>
-	<a href=# id=scrapy><button class='btn btn-default'>Crawl and Scrape with Scrapy</button></a>
-	<a href=# id=full><button class='btn btn-default'>Full Brickset</button></a>
-	<span id=result></span>
-
-	<p id="results2"></p>
-</div>
-
 {% endblock %}

@@ -19,6 +19,7 @@ class EvaluationPipeline(object):
 
     def process_item(self, item, spider):
         if item is not None:
+            print("Evaluating {}".format(item["name"]))
             notify = self.compare(item)
             item = item if notify else None
         return item
