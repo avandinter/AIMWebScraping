@@ -59,9 +59,12 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="AIMWebScraping\" />
+    <Folder Include="AIMWebScraping\AIMWebScraping\" />
+    <Folder Include="AIMWebScraping\AIMWebScraping\AIMWebScraping\" />
+    <Folder Include="AIMWebScraping\AIMWebScraping\AIMWebScraping\data\" />
     <Folder Include="AIMWebScraping\data\fullscrape\" />
     <Folder Include="AIMWebScraping\data\tabledata\" />
-    <Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\AIMWebScraping\data\tabledata\" />
+    <Folder Include="AIMWebScraping\AIMWebScraping\AIMWebScraping\data\tabledata\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\logs\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\pipelines\" />
