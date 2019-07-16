@@ -37,8 +37,22 @@
 			$.ajax({
 				url: '/scrapy_demo',
 				success: function (data) {
-					console.log('get info');
-					$('#results2').html(JSON.stringify(data, null, '   '));
+					info = JSON.parse(data)
+
+					var jsonElement = document.getElementById('scrape_json');
+					jsonElement.innerHTML = "";
+					CodeMirror(
+						jsonElement,
+						{
+							value: info.json,
+							matchBrackets: true,
+							autoCloseBrackets: true,
+							mode: "application/ld+json",
+							smartIndent: true,
+							lineWrapping: true,
+							readOnly: true
+						}
+					);
 				}
 			});
 		});
@@ -96,7 +110,8 @@
 					</div>
 					<div id="collapse_demo" class="panel-collapse collapse">
 						<h2><a target="_blank" href="http://testing-ground.scraping.pro/table">Link</a></h2>
-						<a href=# id=demo><button class='btn btn-default'>Test</button></a>
+						<a href=# id=demo><button class='btn btn-default'>Run Demo</button></a>
+						<pre><code id="scrape_json"></code></pre>
 					</div>
 				</div>
 				<div class="panel panel-default">

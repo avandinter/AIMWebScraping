@@ -60,6 +60,8 @@
   <ItemGroup>
     <Folder Include="AIMWebScraping\" />
     <Folder Include="AIMWebScraping\data\fullscrape\" />
+    <Folder Include="AIMWebScraping\data\tabledata\" />
+    <Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\AIMWebScraping\data\tabledata\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\logs\" />
     <Folder Include="AIMWebScraping\lego_price_scraper\pipelines\" />
@@ -75,6 +77,7 @@
     <Folder Include="C:\Users\avand\Documents\Visual Studio 2017\Projects\AIMWebScraping\AIMWebScraping\AIMWebScraping\Demos\" />-->
   </ItemGroup>
   <ItemGroup>
+    <Content Include="AIMWebScraping\data\example.json" />
     <Content Include="AIMWebScraping\static\images\15328b91-dd33-4adb-8db3-5ba12e3b3194.png" />
     <Content Include="AIMWebScraping\templates\scrapy.html" />
     <Content Include="AIMWebScraping\templates\beautifulsoup.html" />

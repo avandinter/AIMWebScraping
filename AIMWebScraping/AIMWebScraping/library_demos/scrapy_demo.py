@@ -20,21 +20,21 @@ class TableItem(scrapy.Item):
 
 class ExporterPipeline(object):
     def open_spider(self, spider):
-        self.table_to_exporter = {}
+        self.year_to_exporter = {}
 
     def close_spider(self, spider):
-        for exporter in self.table_to_exporter.values():
+        for exporter in self.year_to_exporter.values():
             exporter.finish_exporting()
             exporter.file.close()
 
     def _exporter_for_item(self, item):
-        table = item['table']
-        if table not in self.table_to_exporter:
-            f = open('AIMWebScraping/data/{}.json'.format(table), 'wb')
+        year = item['year']
+        if year not in self.year_to_exporter:
+            f = open('AIMWebScraping/data/tabledata/{}.json'.format(year), 'ab')
             exporter = JsonLinesItemExporter(f)
             exporter.start_exporting()
-            self.table_to_exporter[table] = exporter
-        return self.table_to_exporter[table]
+            self.year_to_exporter[year] = exporter
+        return self.year_to_exporter[year]
 
     def process_item(self, item, spider):
         exporter = self._exporter_for_item(item)

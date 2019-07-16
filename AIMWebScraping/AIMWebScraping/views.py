@@ -1,6 +1,8 @@
 from datetime import datetime
 from flask import render_template, request, jsonify
 import json
+import os
+from glob import glob
 from AIMWebScraping import app
 from AIMWebScraping.lego_price_scraper import init
 from AIMWebScraping.library_demos import requests_demo, beautifulsoup_demo
@@ -117,4 +119,17 @@ def full_brickset():
 @app.route('/scrapy_demo')
 def scrapy_demo():
     ScrapyDemo().begin_scraping()
-    return jsonify("done")
+    return_message = ""
+    json_dir_name = "AimWebScraping/data/tabledata"
+
+    json_pattern = os.path.join(json_dir_name,'*.json')
+    file_list = glob(json_pattern)
+    
+    for file in file_list:
+        with open(file) as json_file:
+            line = json_file.readline()
+            while line:
+                return_message += line
+                line = json_file.readline()
+
+    return json.dumps({"json": return_message})
