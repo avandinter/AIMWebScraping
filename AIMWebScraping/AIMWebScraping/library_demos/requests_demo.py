@@ -13,8 +13,7 @@ def post_login(username, password):
 def download_image(url):
     print(url)
     response = requests.get(url, stream=True)
-    
-    print(response.headers['content-type'])
+
     image_name = str(uuid.uuid4()) + "." + response.headers['content-type'].split('/')[1]
     if response.status_code == 200:
         with open("AIMWebScraping/static/images/" + image_name, 'wb') as f:
